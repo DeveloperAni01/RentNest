@@ -16,3 +16,6 @@ appsettings.Development.json
 # OS
 Thumbs.db
 .DS_Store
+
+#user-project-files
+*.csproj.user
