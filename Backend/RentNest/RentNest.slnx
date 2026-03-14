@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="RentNest.API/RentNest.API.csproj" />
+  <Project Path="RentNest.Application/RentNest.Application.csproj" />
+  <Project Path="RentNest.Domain/RentNest.Domain.csproj" />
+  <Project Path="RentNest.Infrastructure/RentNest.Infrastructure.csproj" />
+  <Project Path="RentNest.MessagingAPI/RentNest.MessagingAPI.csproj" />
+</Solution>
