@@ -33,7 +33,7 @@ namespace RentNest.Domain.Entities
         public PropertyType PropertyType { get; set; }
 
         [Required]
-        [Column(TypeName ="decimal(10,2")]
+        [Column(TypeName ="decimal(10,2)")]
         public decimal PricePerNight { get; set; }
 
         [Required]
@@ -47,7 +47,7 @@ namespace RentNest.Domain.Entities
 
         public string Features { get; set; } = string.Empty; // like pool,sea view,wifi etc..
 
-        [Column(TypeName = "decimal(5,2")]
+        [Column(TypeName = "decimal(5,2)")]
         public decimal Rating { get; set; } = 0;
 
         public bool IsAvailable { get; set; } = true;

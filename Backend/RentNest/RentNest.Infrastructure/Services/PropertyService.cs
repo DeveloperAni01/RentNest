@@ -164,6 +164,7 @@ namespace RentNest.Infrastructure.Services
         {
             var property = await _context.Properties.FirstOrDefaultAsync(p => p.PropertyId == id);
             if (property == null) throw new NotFound($"Property not found wiith id : {id}");
+            if (property.OwnerId != ownerId) throw new UnAuthorized("Only admiin can update property");
 
             if (!string.IsNullOrEmpty(updatePropertyDto.Description)) property.Description = updatePropertyDto.Description;
             if (!string.IsNullOrEmpty(updatePropertyDto.Location)) property.Location = updatePropertyDto.Location;

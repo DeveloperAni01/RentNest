@@ -67,7 +67,7 @@ namespace RentNest.Infrastructure.Services
             if (reservation == null) throw new NotFound($"reservatiion nnot found wirh revID : {createReviewDto.ReservationId}");
 
 
-            if (reservation.ReservationStatus != ReservationStatus.Confirmed) throw new BadRequest("please complete your reservation before giving review!");
+            if (reservation.ReservationStatus != ReservationStatus.Completed) throw new BadRequest("please complete your reservation before giving review!");
 
 
             bool alreadyReviewed = await _contrext.Reviews.AnyAsync(r => r.ReservationId == createReviewDto.ReservationId);

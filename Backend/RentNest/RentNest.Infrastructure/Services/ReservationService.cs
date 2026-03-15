@@ -153,7 +153,7 @@ namespace RentNest.Infrastructure.Services
             if (!isRenter && !isOwner) throw new UnAuthorized("Not Uthothized");
 
             
-            if (isRenter && updateReservationStatusDto.Status != "Cancelled") throw new BadRequest("PLease log innn as renter!");
+            if (isRenter && updateReservationStatusDto.Status != "Cancelled") throw new BadRequest(" invalid operation ");
 
             if (isOwner && updateReservationStatusDto.Status != "Confirmed" && updateReservationStatusDto.Status != "Cancelled" && updateReservationStatusDto.Status != "Completed") throw new BadRequest("Invalid Status operation!");
 

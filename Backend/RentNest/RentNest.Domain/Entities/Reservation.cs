@@ -25,7 +25,7 @@ namespace RentNest.Domain.Entities
         public DateTime CheckOutDate { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(10,2")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal TotalAmount { get; set; }
 
         public ReservationStatus ReservationStatus { get; set; } = ReservationStatus.Pending; //pending, confirmed, completed, cancelled 

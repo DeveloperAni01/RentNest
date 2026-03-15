@@ -43,7 +43,7 @@ namespace RentNest.Infrastructure.Services.Auth
         private static string OtpGenerate()
         {
             var otp = new Random(Guid.NewGuid().GetHashCode());
-            return otp.Next(100000, 99999).ToString();
+            return otp.Next(100000, 999999).ToString();
         }
 
         private async Task<string> CustomUserIdGenerateAsync()
@@ -63,6 +63,7 @@ namespace RentNest.Infrastructure.Services.Auth
 
             if (currentUser == null) throw new UnAuthorized("RefreshToken is not valid");
             if (currentUser.RefreshTokenExpiiry == null) throw new UnAuthorized("Please Log in Aagain");
+            if (currentUser.RefreshTokenExpiiry < DateTime.UtcNow) throw new UnAuthorized("Refresh toke also expired");
 
             string newAccessToken = _tokenService.AccessTokenGeneration(currentUser);
             string newRefreshToken = _tokenService.RefreshTokenGeneration();
@@ -157,7 +158,7 @@ namespace RentNest.Infrastructure.Services.Auth
         public async Task<AuthResponseDto> UserRegisterAsync(RegisterDto registerDto, UserRole role)
         {
             var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == registerDto.Email);
-            if (currentUser == null) throw new Conflict($"{registerDto.Email} already registered!");
+            if (currentUser != null) throw new Conflict($"{registerDto.Email} already registered!");
 
             string newId = await CustomUserIdGenerateAsync();
             string otp = OtpGenerate();
@@ -210,7 +211,7 @@ namespace RentNest.Infrastructure.Services.Auth
             var currentUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == verifyOtpDto.Email);
             if (currentUser == null) throw new NotFound($"{currentUser?.Email} not found!");
             if (currentUser.Otp != verifyOtpDto.Otp) throw new BadRequest("Invalid Otp");
-            if (currentUser.OtpExpiiry > DateTime.UtcNow) throw new BadRequest("Otp Expired");
+            if (currentUser.OtpExpiiry < DateTime.UtcNow) throw new BadRequest("Otp Expired");
             currentUser.IsEmailVerified = true;
             currentUser.Otp = "";
             currentUser.OtpExpiiry = null;
