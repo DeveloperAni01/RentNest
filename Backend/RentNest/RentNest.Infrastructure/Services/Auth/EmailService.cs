@@ -73,7 +73,6 @@ namespace RentNest.Infrastructure.Services.Auth
                 </div>
             </div>";
 
-            await EmailSenderHelperAsync(email, fullName, "RentNest — Verify Your Email Address", html);
-        }
+            await EmailSenderHelperAsync(email, fullName, "RentNest — Verify Your Email Address", html);        }
     }
 }
