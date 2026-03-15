@@ -5,7 +5,7 @@ namespace RentNest.Domain.Enums
     public enum ReservationStatus
     {
         Pending,
-        Confirm,
+        Confirmed,
         Completed,
         Cancelled
     }
