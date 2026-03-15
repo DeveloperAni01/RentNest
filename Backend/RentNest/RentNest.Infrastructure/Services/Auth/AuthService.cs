@@ -52,9 +52,11 @@ namespace RentNest.Infrastructure.Services.Auth
 
             if (lastUser == null) return "USR-000001";
 
-            int lastNumber = int.Parse(lastUser.UserId.Split('-')[1]);
+            var parts = lastUser.UserId.Split('-');
+            if (parts.Length < 2 || !int.TryParse(parts[1], out int lastNum))
+                return "USR-000001";
 
-            return $"USR-{(lastNumber + 1):D6}";
+            return $"USR-{(lastNum + 1):D6}";
         }
 
         public async Task<AuthResponseDto> RefreshTokenAsync(string refreshToken)
