@@ -1,33 +1,6 @@
-# 🏠 RentNest
+#RentNest
 
 > **A full-stack property rental platform** — connecting property owners and renters through a secure, modern web application.
-
-![Platform](https://img.shields.io/badge/Platform-Web-blue?style=flat-square)
-![Backend](https://img.shields.io/badge/Backend-.NET%208-512BD4?style=flat-square&logo=dotnet)
-![Frontend](https://img.shields.io/badge/Frontend-Angular%2019-DD0031?style=flat-square&logo=angular)
-![Auth](https://img.shields.io/badge/Auth-JWT-orange?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-70%2B%20Passing-brightgreen?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
-
----
-
-## 📋 Table of Contents
-
-- [Overview](#-overview)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Architecture](#-architecture)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [API Reference](#-api-reference)
-- [Authentication Flow](#-authentication-flow)
-- [User Roles](#-user-roles)
-- [Testing](#-testing)
-- [Criteria Compliance](#-criteria-compliance-2525)
-- [Screenshots & Flow](#-application-flow)
-- [Branch Strategy](#-branch-strategy)
-
----
 
 ## 🌟 Overview
 
@@ -36,7 +9,7 @@
 - **Owners** to list, manage, and track their properties and reservations
 - **Super Admins** to oversee the entire platform
 
-Built with a clean **N-Layer Architecture** on the backend and a reactive **Angular 19** frontend, secured with **JWT authentication**, **OTP email verification**, and **role-based access control**.
+Built with a clean **N-Layer Architecture** on the backend and a reactive **Angular 21** frontend, secured with **JWT authentication**, **OTP email verification**, and **role-based access control**.
 
 ---
 
@@ -74,7 +47,7 @@ Built with a clean **N-Layer Architecture** on the backend and a reactive **Angu
 ### Backend
 | Technology | Purpose |
 |---|---|
-| **.NET 8 / ASP.NET Core** | Web API framework |
+| **.NET 10 / ASP.NET Core** | Web API framework |
 | **Entity Framework Core** | ORM & database access |
 | **SQL Server** | Relational database |
 | **JWT Bearer** | Token-based authentication |
@@ -85,7 +58,7 @@ Built with a clean **N-Layer Architecture** on the backend and a reactive **Angu
 ### Frontend
 | Technology | Purpose |
 |---|---|
-| **Angular 19** | SPA framework |
+| **Angular 21** | For Frontend development |
 | **TypeScript** | Type-safe development |
 | **Tailwind CSS** | Utility-first styling |
 | **Angular Signals** | Reactive state management |
@@ -99,29 +72,29 @@ Built with a clean **N-Layer Architecture** on the backend and a reactive **Angu
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                      CLIENT (Browser)                    │
-│                    Angular 19 SPA                        │
-│         Tailwind CSS │ Signals │ HTTP Interceptors        │
+│                      CLIENT (Browser)                   │
+│                      Angular 21                         │
+│         Tailwind CSS │ Signals │ HTTP Interceptors      │
 └─────────────────────────┬───────────────────────────────┘
                           │ HTTPS + JWT Bearer
 ┌─────────────────────────▼───────────────────────────────┐
-│                   ASP.NET Core Web API                   │
-│              Controllers │ Middleware │ Guards            │
+│                   ASP.NET Core Web API                  │
+│              Controllers │ Middleware │ Guards          │
 └─────────────────────────┬───────────────────────────────┘
                           │
 ┌─────────────────────────▼───────────────────────────────┐
-│                    Application Layer                     │
-│              Services │ DTOs │ Interfaces                │
+│                    Application Layer                    │
+│              Services │ DTOs │ Interfaces               │
 └─────────────────────────┬───────────────────────────────┘
                           │
 ┌─────────────────────────▼───────────────────────────────┐
-│                  Infrastructure Layer                    │
-│         EF Core │ Repositories │ Token Service           │
+│                  Infrastructure Layer                   │
+│         EF Core │ Repositories │ Token Service          │
 └─────────────────────────┬───────────────────────────────┘
                           │
 ┌─────────────────────────▼───────────────────────────────┐
-│                       SQL Server                         │
-│          Users │ Properties │ Reservations │ OTPs        │
+│                       SQL Server                        │
+│          Users │ Properties │ Reservations │ OTPs       │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -183,108 +156,11 @@ RentNest/
 ## 🚀 Getting Started
 
 ### Prerequisites
-- [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- [Node.js 18+](https://nodejs.org/)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
+- [Node.js 20+](https://nodejs.org/)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server) (or SQL Server Express)
 - [Angular CLI](https://angular.io/cli) — `npm install -g @angular/cli`
 
----
-
-### 🔧 Backend Setup
-
-```bash
-# 1. Navigate to backend
-cd Backend/RentNest
-
-# 2. Restore packages
-dotnet restore
-
-# 3. Update appsettings.json with your config
-# RentNest.API/appsettings.json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=YOUR_SERVER;Database=RentNestDB;Trusted_Connection=True;"
-  },
-  "JwtSettings": {
-    "SecretKey": "YOUR_SECRET_KEY_MIN_32_CHARS",
-    "Issuer": "RentNestAPI",
-    "Audience": "RentNestClient",
-    "ExpirationMinutes": 60
-  },
-  "EmailSettings": {
-    "SmtpHost": "smtp.gmail.com",
-    "SmtpPort": 587,
-    "SenderEmail": "your@email.com",
-    "SenderPassword": "your_app_password"
-  }
-}
-
-# 4. Apply migrations
-cd RentNest.API
-dotnet ef database update
-
-# 5. Run the API
-dotnet run
-# API runs at: https://localhost:7001
-```
-
----
-
-### 🎨 Frontend Setup
-
-```bash
-# 1. Navigate to frontend
-cd Frontend/rentnest-frontend
-
-# 2. Install dependencies
-npm install
-
-# 3. Update environment (if needed)
-# src/environments/environment.ts
-export const environment = {
-  apiUrl: 'https://localhost:7001/api'
-};
-
-# 4. Run the app
-ng serve
-# App runs at: http://localhost:4200
-```
-
----
-
-## 📡 API Reference
-
-### Auth Endpoints
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| `POST` | `/api/auth/register-renter` | Register as renter | ❌ |
-| `POST` | `/api/auth/register-owner` | Register as owner | ❌ |
-| `POST` | `/api/auth/verify-otp` | Verify email OTP | ❌ |
-| `POST` | `/api/auth/resend-otp` | Resend OTP | ❌ |
-| `POST` | `/api/auth/login` | Login & get tokens | ❌ |
-| `POST` | `/api/auth/refresh` | Refresh access token | ✅ |
-| `POST` | `/api/auth/logout` | Logout | ✅ |
-
-### Property Endpoints
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| `GET` | `/api/property` | Get all properties | ❌ |
-| `GET` | `/api/property/{id}` | Get property by ID | ❌ |
-| `GET` | `/api/property/search?q=...` | Search properties | ❌ |
-| `GET` | `/api/property/my-properties` | Owner's properties | ✅ Owner |
-| `POST` | `/api/property` | Create property | ✅ Owner |
-| `PUT` | `/api/property/{id}` | Update property | ✅ Owner |
-| `DELETE` | `/api/property/{id}` | Delete property | ✅ Owner |
-
-### Reservation Endpoints
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| `POST` | `/api/reservation` | Create reservation | ✅ Renter |
-| `GET` | `/api/reservation/my-reservations` | Renter's bookings | ✅ Renter |
-| `GET` | `/api/reservation/owner-reservations` | Owner's bookings | ✅ Owner |
-| `PUT` | `/api/reservation/{id}/status` | Approve/Reject | ✅ Owner |
-
----
 
 ## 🔐 Authentication Flow
 
@@ -337,90 +213,35 @@ ng serve
 
 ---
 
-## 🧪 Testing
-
-### Backend Tests (xUnit) — 8 Passing ✅
-
-```bash
-cd Backend/RentNest/RentNest.Tests
-dotnet test
-```
-
-| Test Suite | Tests | Status |
-|---|---|---|
-| `TestingOtp` | 2 | ✅ Passing |
-| `TestingReservationDates` | 3 | ✅ Passing |
-| `PasswordTesting` | 3 | ✅ Passing |
-| **Total** | **8** | ✅ **All Passing** |
-
----
-
-### Frontend Tests (Vitest) — 62+ Passing ✅
-
-```bash
-cd Frontend/rentnest-frontend
-npx vitest run src/app/core/criteria.spec.ts
-```
-
-| Test Suite | Tests | Status |
-|---|---|---|
-| Login Validation | 6 | ✅ |
-| Register Validation | 8 | ✅ |
-| Responsive Design | 5 | ✅ |
-| Token Storage | 5 | ✅ |
-| Session State | 5 | ✅ |
-| Token Refresh | 2 | ✅ |
-| JWT Integration | 3 | ✅ |
-| Auth Flow | 4 | ✅ |
-| OTP Flow | 2 | ✅ |
-| Auth Service | 6 | ✅ |
-| Property Service | 7 | ✅ |
-| E2E Flows | 4 | ✅ |
-| **Total** | **62+** | ✅ **All Passing** |
-
----
-
-## 📊 Criteria Compliance (25/25)
-
-| Criterion | Points | Status |
-|---|---|---|
-| ✅ Responsiveness & Client-Side Validation | 8/8 | **FULL MARKS** |
-| ✅ Session Handling (localStorage + refresh) | 5/5 | **FULL MARKS** |
-| ✅ JWT & Backend Integration | 5/5 | **FULL MARKS** |
-| ✅ Testing (Component + E2E, 62+ tests) | 7/7 | **FULL MARKS** |
-| **TOTAL** | **25/25** | **100% ✅** |
-
----
-
 ## 🗺 Application Flow
 
 ```
                     ┌─────────────┐
-                    │   Home Page  │
-                    │  (Public)    │
+                    │  Home Page  │
+                    │  (Public)   │
                     └──────┬──────┘
                            │
               ┌────────────┴────────────┐
               │                         │
         ┌─────▼─────┐           ┌──────▼──────┐
-        │  Register  │           │    Login    │
+        │  Register  │           │    Login   │
         └─────┬─────┘           └──────┬──────┘
-              │                         │
-        ┌─────▼─────┐                   │
-        │  OTP Email │                   │
-        │Verification│                   │
-        └─────┬─────┘                   │
-              └─────────────┬───────────┘
+              │                        │
+        ┌─────▼─────┐                  │
+        │  OTP Email│                 │
+        │Verification│                 │
+        └─────┬─────┘                  │
+              └─────────────┬──────────┘
                             │
                    ┌────────▼────────┐
-                   │  Role Detection  │
+                   │  Role Detection │
                    └────────┬────────┘
                             │
            ┌────────────────┼────────────────┐
            │                │                │
     ┌──────▼──────┐  ┌──────▼──────┐  ┌─────▼──────┐
-    │   RENTER    │  │    OWNER    │  │ SUPER ADMIN │
-    │  Dashboard  │  │  Dashboard  │  │  Dashboard  │
+    │   RENTER    │  │    OWNER    │  │ SUPER ADMIN│
+    │  Dashboard  │  │  Dashboard  │  │  Dashboard │
     └──────┬──────┘  └──────┬──────┘  └─────┬──────┘
            │                │                │
     Browse/Search    Manage Listings    User Management
@@ -455,12 +276,8 @@ Full technical documentation is available in the `Docs/` folder:
 
 ---
 
-## 📜 License
-
-This project is licensed under the MIT License.
-
 ---
 
 <div align="center">
-  <strong>Built with ❤️ using .NET 8 + Angular 19</strong>
+  <strong>Built with ❤️ using .NET 10 + Angular 21</strong>
 </div>
