@@ -121,7 +121,7 @@ try
 
     app.Lifetime.ApplicationStarted.Register(() =>
     {
-        Log.Information("RentNest Server is runing successfully and listening!!");
+        Log.Information($"RentNest Server is runing successfully in {builder.Environment.EnvironmentName} mode and listening!!");
        
         foreach (var url in app.Urls)
         {
