@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RentNest — Backend Technical Documentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --blue:      #1a73e8;
+    --blue-dark: #0d47a1;
+    --blue-light:#e8f0fe;
+    --orange:    #f97316;
+    --green:     #16a34a;
+    --red:       #dc2626;
+    --purple:    #7c3aed;
+    --gray-50:   #f9fafb;
+    --gray-100:  #f3f4f6;
+    --gray-200:  #e5e7eb;
+    --gray-400:  #9ca3af;
+    --gray-600:  #4b5563;
+    --gray-800:  #1f2937;
+    --gray-900:  #111827;
+    --text:      #1f2937;
+    --bg:        #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gray-50);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0d47a1 0%, #1a73e8 60%, #1565c0 100%);
+    color: white;
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  header p {
+    font-size: 15px;
+    opacity: 0.85;
+    max-width: 600px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    opacity: 0.9;
+  }
+  .meta-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 6px #4ade80;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: white;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  nav a {
+    display: block;
+    padding: 14px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-600);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav a:hover { color: var(--blue); border-bottom-color: var(--blue); }
+
+  /* ── LAYOUT ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 40px; }
+
+  section { margin-bottom: 56px; }
+
+  .section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray-200);
+    margin-left: 8px;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--gray-400);
+    margin-bottom: 24px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-600);
+    background: var(--gray-50);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ── ER DIAGRAM ── */
+  .er-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .er-grid-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .er-table {
+    background: white;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .er-table-header {
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .er-table-header .pk-badge {
+    font-size: 10px;
+    background: rgba(255,255,255,0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .er-table.users .er-table-header    { background: var(--blue); }
+  .er-table.properties .er-table-header { background: #0891b2; }
+  .er-table.images .er-table-header   { background: #0d9488; }
+  .er-table.reservations .er-table-header { background: var(--purple); }
+  .er-table.reviews .er-table-header  { background: var(--orange); }
+  .er-table.messages .er-table-header { background: #be185d; }
+
+  .er-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 10px;
+    font-size: 11px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .er-field:last-child { border-bottom: none; }
+  .er-field:hover { background: var(--gray-50); }
+  .er-field-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--gray-800);
+    font-weight: 500;
+  }
+  .er-field-type {
+    font-size: 9.5px;
+    color: var(--gray-400);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .badge-pk {
+    font-size: 9px; font-weight: 700;
+    background: #fef3c7; color: #92400e;
+    padding: 1px 5px; border-radius: 3px; margin-right: 4px;
+  }
+  .badge-fk {
+    font-size: 9px; font-weight: 700;
+    background: #ede9fe; color: #5b21b6;
+    padding: 1px 5px; border-radius: 3px; margin-right: 4px;
+  }
+
+  /* relationships */
+  .rel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .rel-item {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+  }
+  .rel-from { font-weight: 600; color: var(--blue); }
+  .rel-arrow { color: var(--gray-400); font-size: 16px; }
+  .rel-to { font-weight: 600; color: var(--gray-700); }
+  .rel-type {
+    margin-left: auto;
+    font-size: 11px;
+    background: var(--blue-light);
+    color: var(--blue-dark);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  /* ── ARCHITECTURE ── */
+  .arch-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .arch-layer {
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+  }
+  .arch-layer-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+    color: white;
+  }
+  .arch-layer-content { flex: 1; }
+  .arch-layer-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .arch-layer-desc  { font-size: 12px; opacity: 0.8; }
+  .arch-layer-items {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;
+  }
+  .arch-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+  .arch-arrow {
+    text-align: center;
+    color: var(--gray-400);
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 0;
+  }
+
+  .layer-1 { background: #eff6ff; }
+  .layer-1 .arch-layer-num { background: var(--blue); }
+  .layer-1 .arch-layer-title { color: var(--blue-dark); }
+  .layer-1 .arch-tag { background: #dbeafe; color: #1e40af; }
+
+  .layer-2 { background: #f0fdf4; }
+  .layer-2 .arch-layer-num { background: var(--green); }
+  .layer-2 .arch-layer-title { color: #14532d; }
+  .layer-2 .arch-tag { background: #dcfce7; color: #166534; }
+
+  .layer-3 { background: #faf5ff; }
+  .layer-3 .arch-layer-num { background: var(--purple); }
+  .layer-3 .arch-layer-title { color: #4c1d95; }
+  .layer-3 .arch-tag { background: #ede9fe; color: #4c1d95; }
+
+  .layer-4 { background: #fff7ed; }
+  .layer-4 .arch-layer-num { background: var(--orange); }
+  .layer-4 .arch-layer-title { color: #7c2d12; }
+  .layer-4 .arch-tag { background: #ffedd5; color: #7c2d12; }
+
+  .layer-client { background: var(--gray-800); }
+  .layer-client .arch-layer-num { background: var(--gray-600); }
+  .layer-client .arch-layer-title { color: white; }
+  .layer-client .arch-layer-desc { color: var(--gray-400); }
+  .layer-client .arch-tag { background: var(--gray-700); color: var(--gray-200); }
+
+  /* ── AUTH FLOW ── */
+  .flow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .flow-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .flow-step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .flow-step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .flow-step-line {
+    width: 2px;
+    flex: 1;
+    min-height: 24px;
+    background: var(--gray-200);
+    margin: 4px 0;
+  }
+  .flow-step-content {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    flex: 1;
+  }
+  .flow-step-title {
+    font-size: 14px; font-weight: 600;
+    color: var(--gray-900); margin-bottom: 4px;
+  }
+  .flow-step-desc {
+    font-size: 12.5px; color: var(--gray-600); line-height: 1.6;
+  }
+  .flow-step-tags {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;
+  }
+  .flow-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tag-blue   { background: var(--blue-light); color: var(--blue-dark); }
+  .tag-green  { background: #dcfce7; color: #166534; }
+  .tag-orange { background: #ffedd5; color: #7c2d12; }
+  .tag-red    { background: #fee2e2; color: #991b1b; }
+  .tag-purple { background: #ede9fe; color: #4c1d95; }
+  .tag-gray   { background: var(--gray-100); color: var(--gray-600); }
+
+  /* ── ROUTES TABLE ── */
+  .routes-section { margin-bottom: 28px; }
+  .routes-section-title {
+    font-size: 14px; font-weight: 700;
+    color: var(--gray-700);
+    padding: 10px 16px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .route-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--gray-200);
+    border-radius: 0 0 10px 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .route-table {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: collapse;
+    background: white;
+  }
+  .route-table th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: white;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .route-table td {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+  }
+  .route-table tr:last-child td { border-bottom: none; }
+  .route-table tr:hover td { background: var(--gray-50); }
+
+  .method {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    min-width: 52px;
+    text-align: center;
+  }
+  .method-get    { background: #dcfce7; color: #166534; }
+  .method-post   { background: #dbeafe; color: #1e40af; }
+  .method-put    { background: #fef3c7; color: #92400e; }
+  .method-delete { background: #fee2e2; color: #991b1b; }
+
+  .url-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--gray-800);
+  }
+
+  .auth-badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .auth-public  { background: var(--gray-100); color: var(--gray-600); }
+  .auth-jwt     { background: var(--blue-light); color: var(--blue-dark); }
+  .auth-owner   { background: #d1fae5; color: #065f46; }
+  .auth-renter  { background: #ede9fe; color: #4c1d95; }
+  .auth-admin   { background: #fee2e2; color: #991b1b; }
+
+  /* ── ENUMS ── */
+  .enum-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .enum-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .enum-header {
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+  }
+  .enum-item {
+    padding: 7px 14px;
+    font-size: 12.5px;
+    font-family: 'JetBrains Mono', monospace;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .enum-item:last-child { border-bottom: none; }
+  .enum-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--gray-900);
+    color: var(--gray-400);
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    margin-top: 40px;
+  }
+  footer strong { color: white; }
+
+  /* ── RESPONSIVE ── */
+
+  /* Tablet — 768px and below */
+  @media (max-width: 768px) {
+    header { padding: 32px 20px 28px; }
+    header h1 { font-size: 26px; }
+    header p  { font-size: 13px; }
+    .header-meta { gap: 12px; }
+    .meta-item { font-size: 12px; }
+
+    nav { padding: 0 12px; }
+    nav a { padding: 12px 10px; font-size: 12px; }
+
+    main { padding: 24px 16px; }
+    section { margin-bottom: 40px; }
+    .section-title { font-size: 18px; }
+
+    /* ER tables — 2 columns on tablet */
+    .er-grid        { grid-template-columns: 1fr 1fr; }
+    .er-grid-bottom { grid-template-columns: 1fr 1fr; }
+
+    /* Relationships — 1 column */
+    .rel-grid { grid-template-columns: 1fr; }
+
+    /* Auth flow — stack vertically */
+    #auth-flow > div[style*="grid"] { display: flex !important; flex-direction: column !important; gap: 24px !important; }
+
+    /* Route tables — allow horizontal scroll */
+    .routes-section { overflow-x: auto; }
+    .route-table { min-width: 540px; }
+
+    /* Enum grid — 2 columns */
+    .enum-grid { grid-template-columns: 1fr 1fr; }
+
+    /* Arch layer items wrap */
+    .arch-layer-items { gap: 4px; }
+    .arch-tag { font-size: 10px; }
+  }
+
+  /* Mobile — 480px and below */
+  @media (max-width: 480px) {
+    header { padding: 24px 16px 20px; }
+    header h1 { font-size: 22px; }
+    header p  { font-size: 12px; }
+
+    nav { padding: 0 4px; }
+    nav a { padding: 10px 8px; font-size: 11px; }
+
+    main { padding: 16px 12px; }
+    .section-title { font-size: 16px; }
+    .section-sub   { font-size: 12px; }
+
+    /* ER tables — 1 column on mobile */
+    .er-grid        { grid-template-columns: 1fr; }
+    .er-grid-bottom { grid-template-columns: 1fr; }
+
+    /* Relationships — 1 column */
+    .rel-grid { grid-template-columns: 1fr; }
+    .rel-item { flex-wrap: wrap; gap: 6px; }
+    .rel-type { margin-left: 0; }
+
+    /* Enum grid — 1 column */
+    .enum-grid { grid-template-columns: 1fr; }
+
+    /* Flow steps */
+    .flow-step-content { padding: 10px 12px; }
+    .flow-step-title   { font-size: 13px; }
+    .flow-step-desc    { font-size: 11.5px; }
+
+    /* Arch */
+    .arch-layer { padding: 12px 14px; gap: 10px; }
+    .arch-layer-title { font-size: 13px; }
+    .arch-layer-desc  { font-size: 11px; }
+    .arch-layer-num   { width: 26px; height: 26px; font-size: 11px; }
+
+    /* Route tables — handled by .route-table-wrap */
+    .route-table td, .route-table th { padding: 8px 10px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-badge">BACKEND DOCUMENTATION</div>
+  <h1>🏠 RentNest</h1>
+  <p>Full technical documentation — ER Diagram, System Architecture, Auth Flow & API Route Map</p>
+  <div class="header-meta">
+    <div class="meta-item"><div class="meta-dot"></div> ASP.NET Core Web API (.NET 10)</div>
+    <div class="meta-item"><div class="meta-dot"></div> Entity Framework Core</div>
+    <div class="meta-item"><div class="meta-dot"></div> SQL Server</div>
+    <div class="meta-item"><div class="meta-dot"></div> JWT Authentication</div>
+    <div class="meta-item"><div class="meta-dot"></div> Angular 21 Frontend</div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <a href="#er">ER Diagram</a>
+  <a href="#architecture">Architecture</a>
+  <a href="#auth-flow">Auth Flow</a>
+  <a href="#reservation-flow">Reservation Flow</a>
+  <a href="#routes">API Routes</a>
+  <a href="#enums">Enums</a>
+</nav>
+
+<main>
+
+  <!-- ══════════════════════════════════════════
+       1. ER DIAGRAM
+  ══════════════════════════════════════════ -->
+  <section id="er">
+    <div class="section-title">📊 ER Diagram — RentNestDB</div>
+    <div class="section-sub">Main database · 5 tables · Foreign key relationships shown below</div>
+
+    <div class="er-grid">
+
+      <!-- USERS -->
+      <div class="er-table users">
+        <div class="er-table-header">Users <span class="pk-badge">Main DB</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-pk">PK</span>UserId</span><span class="er-field-type">string</span></div>
+        <div class="er-field"><span class="er-field-name">FirstName</span><span class="er-field-type">string(100)</span></div>
+        <div class="er-field"><span class="er-field-name">MiddleName</span><span class="er-field-type">string(50)?</span></div>
+        <div class="er-field"><span class="er-field-name">LastName</span><span class="er-field-type">string(100)</span></div>
+        <div class="er-field"><span class="er-field-name">Gender</span><span class="er-field-type">string(10)</span></div>
+        <div class="er-field"><span class="er-field-name">PhoneNumber</span><span class="er-field-type">string(10)</span></div>
+        <div class="er-field"><span class="er-field-name">Email</span><span class="er-field-type">string(50) UNIQUE</span></div>
+        <div class="er-field"><span class="er-field-name">HashedPassword</span><span class="er-field-type">string(255)</span></div>
+        <div class="er-field"><span class="er-field-name">Role</span><span class="er-field-type">UserRole enum</span></div>
+        <div class="er-field"><span class="er-field-name">IsOwner</span><span class="er-field-type">bool</span></div>
+        <div class="er-field"><span class="er-field-name">IsEmailVerified</span><span class="er-field-type">bool</span></div>
+        <div class="er-field"><span class="er-field-name">Otp</span><span class="er-field-type">string(6)?</span></div>
+        <div class="er-field"><span class="er-field-name">OtpExpiry</span><span class="er-field-type">DateTime?</span></div>
+        <div class="er-field"><span class="er-field-name">IsActive</span><span class="er-field-type">bool</span></div>
+        <div class="er-field"><span class="er-field-name">RefreshToken</span><span class="er-field-type">string(500)?</span></div>
+        <div class="er-field"><span class="er-field-name">RefreshTokenExpiry</span><span class="er-field-type">DateTime?</span></div>
+        <div class="er-field"><span class="er-field-name">CreatedAt</span><span class="er-field-type">DateTime</span></div>
+      </div>
+
+      <!-- PROPERTIES -->
+      <div class="er-table properties">
+        <div class="er-table-header">Properties <span class="pk-badge">Main DB</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-pk">PK</span>PropertyId</span><span class="er-field-type">int</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-fk">FK</span>OwnerId</span><span class="er-field-type">string → Users</span></div>
+        <div class="er-field"><span class="er-field-name">Title</span><span class="er-field-type">string(50)</span></div>
+        <div class="er-field"><span class="er-field-name">Description</span><span class="er-field-type">string</span></div>
+        <div class="er-field"><span class="er-field-name">Location</span><span class="er-field-type">string(50)</span></div>
+        <div class="er-field"><span class="er-field-name">City</span><span class="er-field-type">string(50)</span></div>
+        <div class="er-field"><span class="er-field-name">PropertyType</span><span class="er-field-type">PropertyType enum</span></div>
+        <div class="er-field"><span class="er-field-name">PricePerNight</span><span class="er-field-type">decimal(10,2)</span></div>
+        <div class="er-field"><span class="er-field-name">MaxGuests</span><span class="er-field-type">int</span></div>
+        <div class="er-field"><span class="er-field-name">CheckInTime</span><span class="er-field-type">string</span></div>
+        <div class="er-field"><span class="er-field-name">CheckOutTime</span><span class="er-field-type">string</span></div>
+        <div class="er-field"><span class="er-field-name">Features</span><span class="er-field-type">string (comma sep)</span></div>
+        <div class="er-field"><span class="er-field-name">Rating</span><span class="er-field-type">decimal(5,2)</span></div>
+        <div class="er-field"><span class="er-field-name">IsAvailable</span><span class="er-field-type">bool</span></div>
+        <div class="er-field"><span class="er-field-name">CreatedAt</span><span class="er-field-type">DateTime</span></div>
+      </div>
+
+      <!-- PROPERTY IMAGES -->
+      <div class="er-table images">
+        <div class="er-table-header">PropertyImages <span class="pk-badge">Main DB</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-pk">PK</span>ImageId</span><span class="er-field-type">int</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-fk">FK</span>PropertyId</span><span class="er-field-type">int → Properties</span></div>
+        <div class="er-field"><span class="er-field-name">ImageUrl</span><span class="er-field-type">string</span></div>
+        <div class="er-field"><span class="er-field-name">DisplayOrder</span><span class="er-field-type">int (1–5)</span></div>
+        <div class="er-field"><span class="er-field-name">UploadedAt</span><span class="er-field-type">DateTime</span></div>
+      </div>
+
+    </div>
+
+    <div class="er-grid-bottom">
+
+      <!-- RESERVATIONS -->
+      <div class="er-table reservations">
+        <div class="er-table-header">Reservations <span class="pk-badge">Main DB</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-pk">PK</span>ReservationId</span><span class="er-field-type">int</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-fk">FK</span>UserId</span><span class="er-field-type">string → Users</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-fk">FK</span>PropertyId</span><span class="er-field-type">int → Properties</span></div>
+        <div class="er-field"><span class="er-field-name">CheckInDate</span><span class="er-field-type">DateTime</span></div>
+        <div class="er-field"><span class="er-field-name">CheckOutDate</span><span class="er-field-type">DateTime</span></div>
+        <div class="er-field"><span class="er-field-name">TotalAmount</span><span class="er-field-type">decimal(10,2)</span></div>
+        <div class="er-field"><span class="er-field-name">ReservationStatus</span><span class="er-field-type">ReservationStatus enum</span></div>
+        <div class="er-field"><span class="er-field-name">PaymentStatus</span><span class="er-field-type">string</span></div>
+        <div class="er-field"><span class="er-field-name">BookedAt</span><span class="er-field-type">DateTime</span></div>
+      </div>
+
+      <!-- REVIEWS -->
+      <div class="er-table reviews">
+        <div class="er-table-header">Reviews <span class="pk-badge">Main DB</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-pk">PK</span>ReviewId</span><span class="er-field-type">int</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-fk">FK</span>UserId</span><span class="er-field-type">string → Users</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-fk">FK</span>ReservationId</span><span class="er-field-type">int → Reservations</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-fk">FK</span>PropertyId</span><span class="er-field-type">int → Properties</span></div>
+        <div class="er-field"><span class="er-field-name">Rating</span><span class="er-field-type">int (1–5)</span></div>
+        <div class="er-field"><span class="er-field-name">CreatedAt</span><span class="er-field-type">DateTime</span></div>
+      </div>
+
+    </div>
+
+    <!-- MESSAGES DB (separate) -->
+    <div style="margin-top:16px;">
+      <div style="font-size:13px;font-weight:600;color:var(--gray-500);margin-bottom:8px;">
+        💬 Messaging Database (Separate DB — RentNestMessagingDB)
+      </div>
+      <div class="er-table messages" style="max-width:380px;">
+        <div class="er-table-header">Messages <span class="pk-badge">Messaging DB</span></div>
+        <div class="er-field"><span class="er-field-name"><span class="badge-pk">PK</span>MessageId</span><span class="er-field-type">int</span></div>
+        <div class="er-field"><span class="er-field-name">SenderId</span><span class="er-field-type">string (UserId ref)</span></div>
+        <div class="er-field"><span class="er-field-name">ReceiverId</span><span class="er-field-type">string (UserId ref)</span></div>
+        <div class="er-field"><span class="er-field-name">SenderName</span><span class="er-field-type">string</span></div>
+        <div class="er-field"><span class="er-field-name">ReceiverName</span><span class="er-field-type">string</span></div>
+        <div class="er-field"><span class="er-field-name">Content</span><span class="er-field-type">string</span></div>
+        <div class="er-field"><span class="er-field-name">IsRead</span><span class="er-field-type">bool</span></div>
+        <div class="er-field"><span class="er-field-name">SentAt</span><span class="er-field-type">DateTime</span></div>
+      </div>
+    </div>
+
+    <!-- RELATIONSHIPS -->
+    <div style="margin-top:24px;">
+      <div style="font-size:14px;font-weight:700;color:var(--gray-700);margin-bottom:8px;">🔗 Relationships</div>
+      <div style="font-size:11px;color:var(--gray-400);margin-bottom:12px;">
+        &nbsp;&nbsp;<strong>1 ──── 1</strong> = One to One &nbsp;&nbsp;&nbsp;
+        <strong>1 ──── ∞</strong> = One to Many &nbsp;&nbsp;&nbsp;
+        <span style="background:#fef3c7;color:#92400e;padding:1px 5px;border-radius:3px;font-size:10px;">CASCADE</span> = deleting parent deletes children &nbsp;&nbsp;&nbsp;
+        <span style="background:#fee2e2;color:#991b1b;padding:1px 5px;border-radius:3px;font-size:10px;">NO ACTION</span> = parent can be deleted independently
+      </div>
+      <div class="rel-grid">
+        <div class="rel-item"><span class="rel-from">User</span><span class="rel-arrow" style="font-family:monospace;letter-spacing:-1px;color:var(--blue);">1 ──── ∞</span><span class="rel-to">Properties</span><span class="rel-type" style="background:#dcfce7;color:#166534;">One to Many · CASCADE</span></div>
+        <div class="rel-item"><span class="rel-from">Property</span><span class="rel-arrow" style="font-family:monospace;letter-spacing:-1px;color:var(--blue);">1 ──── ∞</span><span class="rel-to">PropertyImages</span><span class="rel-type" style="background:#dcfce7;color:#166534;">One to Many · CASCADE</span></div>
+        <div class="rel-item"><span class="rel-from">User</span><span class="rel-arrow" style="font-family:monospace;letter-spacing:-1px;color:var(--blue);">1 ──── ∞</span><span class="rel-to">Reservations</span><span class="rel-type">One to Many · NO ACTION</span></div>
+        <div class="rel-item"><span class="rel-from">Property</span><span class="rel-arrow" style="font-family:monospace;letter-spacing:-1px;color:var(--blue);">1 ──── ∞</span><span class="rel-to">Reservations</span><span class="rel-type">One to Many · NO ACTION</span></div>
+        <div class="rel-item"><span class="rel-from">Reservation</span><span class="rel-arrow" style="font-family:monospace;letter-spacing:-1px;color:#7c3aed;">1 ──── 1</span><span class="rel-to">Review</span><span class="rel-type" style="background:#ede9fe;color:#4c1d95;">One to One · NO ACTION</span></div>
+        <div class="rel-item"><span class="rel-from">User</span><span class="rel-arrow" style="font-family:monospace;letter-spacing:-1px;color:var(--blue);">1 ──── ∞</span><span class="rel-to">Reviews</span><span class="rel-type">One to Many · NO ACTION</span></div>
+        <div class="rel-item"><span class="rel-from">Property</span><span class="rel-arrow" style="font-family:monospace;letter-spacing:-1px;color:var(--blue);">1 ──── ∞</span><span class="rel-to">Reviews</span><span class="rel-type">One to Many · NO ACTION</span></div>
+        <div class="rel-item"><span class="rel-from">Messages</span><span class="rel-arrow" style="font-family:monospace;letter-spacing:-1px;color:#be185d;">✦ ──── ✦</span><span class="rel-to">Separate DB</span><span class="rel-type" style="background:#fce7f3;color:#831843;">No FK · Same JWT</span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       2. SYSTEM ARCHITECTURE
+  ══════════════════════════════════════════ -->
+  <section id="architecture">
+    <div class="section-title">🏗️ System Architecture</div>
+    <div class="section-sub">Clean Architecture — 4 layers + Angular frontend + separate Messaging API</div>
+
+    <div class="arch-layers">
+
+      <div class="arch-layer layer-client">
+        <div class="arch-layer-num">C</div>
+        <div class="arch-layer-content">
+          <div class="arch-layer-title">Client — Angular 21</div>
+          <div class="arch-layer-desc">Frontend SPA running on http://localhost:4200</div>
+          <div class="arch-layer-items">
+            <span class="arch-tag">Angular 21</span>
+            <span class="arch-tag">Tailwind CSS</span>
+            <span class="arch-tag">PrimeNG</span>
+            <span class="arch-tag">JWT (localStorage)</span>
+            <span class="arch-tag">HttpInterceptor</span>
+            <span class="arch-tag">Route Guards</span>
+          </div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕ HTTP / REST API (JSON)</div>
+
+      <div class="arch-layer layer-4">
+        <div class="arch-layer-num">4</div>
+        <div class="arch-layer-content">
+          <div class="arch-layer-title">RentNest.API — Presentation Layer</div>
+          <div class="arch-layer-desc">Entry point · Controllers · Middleware · JWT Auth · CORS</div>
+          <div class="arch-layer-items">
+            <span class="arch-tag">AuthController</span>
+            <span class="arch-tag">PropertyController</span>
+            <span class="arch-tag">ReservationController</span>
+            <span class="arch-tag">ReviewController</span>
+            <span class="arch-tag">AdminController</span>
+            <span class="arch-tag">GlobalExceptionMiddleware</span>
+            <span class="arch-tag">Serilog</span>
+            <span class="arch-tag">Scalar Docs</span>
+          </div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕ Calls Interfaces</div>
+
+      <div class="arch-layer layer-3">
+        <div class="arch-layer-num">3</div>
+        <div class="arch-layer-content">
+          <div class="arch-layer-title">RentNest.Infrastructure — Service Layer</div>
+          <div class="arch-layer-desc">Business logic · DB access via EF Core · Email · Password hashing · JWT tokens</div>
+          <div class="arch-layer-items">
+            <span class="arch-tag">AuthService</span>
+            <span class="arch-tag">PropertyService</span>
+            <span class="arch-tag">ReservationService</span>
+            <span class="arch-tag">ReviewService</span>
+            <span class="arch-tag">EmailService (MailKit)</span>
+            <span class="arch-tag">TokenService (JWT)</span>
+            <span class="arch-tag">PasswordService (BCrypt)</span>
+            <span class="arch-tag">AppDbContext (EF Core)</span>
+          </div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕ Uses DTOs &amp; Interfaces</div>
+
+      <div class="arch-layer layer-2">
+        <div class="arch-layer-num">2</div>
+        <div class="arch-layer-content">
+          <div class="arch-layer-title">RentNest.Application — Contract Layer</div>
+          <div class="arch-layer-desc">DTOs · Interfaces · No business logic · No DB access</div>
+          <div class="arch-layer-items">
+            <span class="arch-tag">IAuthService</span>
+            <span class="arch-tag">IPropertyService</span>
+            <span class="arch-tag">IReservationService</span>
+            <span class="arch-tag">IReviewService</span>
+            <span class="arch-tag">RegisterDto</span>
+            <span class="arch-tag">AuthResponseDto</span>
+            <span class="arch-tag">PropertyResponseDto</span>
+            <span class="arch-tag">ApiResponseDto&lt;T&gt;</span>
+          </div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕ Uses Entities &amp; Enums</div>
+
+      <div class="arch-layer layer-1">
+        <div class="arch-layer-num">1</div>
+        <div class="arch-layer-content">
+          <div class="arch-layer-title">RentNest.Domain — Core Layer</div>
+          <div class="arch-layer-desc">Entities · Enums · No dependencies on other layers</div>
+          <div class="arch-layer-items">
+            <span class="arch-tag">User</span>
+            <span class="arch-tag">Property</span>
+            <span class="arch-tag">PropertyImage</span>
+            <span class="arch-tag">Reservation</span>
+            <span class="arch-tag">Review</span>
+            <span class="arch-tag">UserRole enum</span>
+            <span class="arch-tag">PropertyType enum</span>
+            <span class="arch-tag">ReservationStatus enum</span>
+          </div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕ EF Core Migrations</div>
+
+      <div class="arch-layer" style="background:#fdf2f8;border:1px dashed #f9a8d4;">
+        <div class="arch-layer-num" style="background:#be185d;">M</div>
+        <div class="arch-layer-content">
+          <div class="arch-layer-title" style="color:#831843;">RentNest.MessagingAPI — Separate Project</div>
+          <div class="arch-layer-desc" style="color:#9d174d;">Runs on a different port · Same JWT secret · Separate DB (RentNestMessagingDB)</div>
+          <div class="arch-layer-items">
+            <span class="arch-tag" style="background:#fce7f3;color:#831843;">MessageController</span>
+            <span class="arch-tag" style="background:#fce7f3;color:#831843;">MessageService</span>
+            <span class="arch-tag" style="background:#fce7f3;color:#831843;">Message entity</span>
+            <span class="arch-tag" style="background:#fce7f3;color:#831843;">MessagingDbContext</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       3. AUTH FLOW
+  ══════════════════════════════════════════ -->
+  <section id="auth-flow">
+    <div class="section-title">🔐 Auth Flow</div>
+    <div class="section-sub">Complete registration → verification → login → token lifecycle</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+
+      <!-- REGISTER FLOW -->
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--gray-700);margin-bottom:16px;">📝 Registration Flow</div>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-step-left"><div class="flow-step-num">1</div><div class="flow-step-line"></div></div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">POST /signup-user or /signup-owner</div>
+              <div class="flow-step-desc">User sends FirstName, LastName, Email, Password, Gender</div>
+              <div class="flow-step-tags"><span class="flow-tag tag-blue">RegisterDto</span><span class="flow-tag tag-gray">No Auth</span></div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-left"><div class="flow-step-num">2</div><div class="flow-step-line"></div></div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">Password Hashed with BCrypt</div>
+              <div class="flow-step-desc">Plain password is never stored — BCrypt.HashPassword() runs before saving</div>
+              <div class="flow-step-tags"><span class="flow-tag tag-purple">BCrypt</span></div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-left"><div class="flow-step-num">3</div><div class="flow-step-line"></div></div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">OTP Generated &amp; Emailed</div>
+              <div class="flow-step-desc">6-digit OTP generated, saved to DB with 10-minute expiry, sent via Gmail SMTP</div>
+              <div class="flow-step-tags"><span class="flow-tag tag-orange">MailKit</span><span class="flow-tag tag-gray">Expiry: 10min</span></div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-left"><div class="flow-step-num">4</div><div class="flow-step-line"></div></div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">POST /verify-otp</div>
+              <div class="flow-step-desc">User submits email + OTP → IsEmailVerified = true, OTP cleared</div>
+              <div class="flow-step-tags"><span class="flow-tag tag-green">IsEmailVerified = true</span></div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-left"><div class="flow-step-num">5</div></div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">Owner: Admin Approval Required</div>
+              <div class="flow-step-desc">Owner accounts need SuperAdmin to set IsOwner = true before they can create properties</div>
+              <div class="flow-step-tags"><span class="flow-tag tag-red">IsOwner = false until approved</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOGIN FLOW -->
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--gray-700);margin-bottom:16px;">🔑 Login &amp; Token Flow</div>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-step-left"><div class="flow-step-num">1</div><div class="flow-step-line"></div></div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">POST /signin-user</div>
+              <div class="flow-step-desc">User sends Email + Password</div>
+              <div class="flow-step-tags"><span class="flow-tag tag-blue">LoginDto</span><span class="flow-tag tag-gray">No Auth</span></div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-left"><div class="flow-step-num">2</div><div class="flow-step-line"></div></div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">3 Checks Before Login</div>
+              <div class="flow-step-desc">① IsEmailVerified must be true ② IsActive must be true ③ BCrypt.Verify password</div>
+              <div class="flow-step-tags"><span class="flow-tag tag-red">Fails → 401</span></div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-left"><div class="flow-step-num">3</div><div class="flow-step-line"></div></div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">JWT Access Token Generated</div>
+              <div class="flow-step-desc">Contains: userId, email, role, name claims. Expires in 60 minutes</div>
+              <div class="flow-step-tags"><span class="flow-tag tag-purple">JWT · 60min</span><span class="flow-tag tag-blue">HMAC SHA256</span></div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-left"><div class="flow-step-num">4</div><div class="flow-step-line"></div></div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">Refresh Token Saved</div>
+              <div class="flow-step-desc">Cryptographically random token saved to DB with 7-day expiry</div>
+              <div class="flow-step-tags"><span class="flow-tag tag-green">RefreshToken · 7 days</span></div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-left"><div class="flow-step-num">5</div></div>
+            <div class="flow-step-content">
+              <div class="flow-step-title">Angular Stores Token in localStorage</div>
+              <div class="flow-step-desc">HttpInterceptor attaches Bearer token to every API request automatically</div>
+              <div class="flow-step-tags"><span class="flow-tag tag-orange">localStorage</span><span class="flow-tag tag-blue">Authorization: Bearer</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       4. RESERVATION FLOW
+  ══════════════════════════════════════════ -->
+  <section id="reservation-flow">
+    <div class="section-title">📅 Reservation Flow</div>
+    <div class="section-sub">Complete lifecycle of a booking from creation to completion</div>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">1</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-content">
+          <div class="flow-step-title">Renter Creates Reservation</div>
+          <div class="flow-step-desc">POST /reservations/create — Renter sends PropertyId, CheckInDate, CheckOutDate. System validates: ① No past dates ② Checkout after checkin ③ No overlapping confirmed bookings ④ Property is available</div>
+          <div class="flow-step-tags"><span class="flow-tag tag-purple">RenterOnly</span><span class="flow-tag tag-blue">Status: Pending</span><span class="flow-tag tag-gray">TotalAmount auto-calculated</span></div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">2</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-content">
+          <div class="flow-step-title">Owner Confirms or Cancels</div>
+          <div class="flow-step-desc">PUT /reservations/status — Owner can set status to Confirmed, Cancelled, or Completed</div>
+          <div class="flow-step-tags"><span class="flow-tag tag-green">Confirmed</span><span class="flow-tag tag-red">Cancelled</span><span class="flow-tag tag-orange">Completed</span></div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">3</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-content">
+          <div class="flow-step-title">Renter Can Cancel</div>
+          <div class="flow-step-desc">PUT /reservations/status — Renter can ONLY set status to Cancelled (not Confirmed or Completed)</div>
+          <div class="flow-step-tags"><span class="flow-tag tag-red">Cancelled only</span></div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">4</div><div class="flow-step-line"></div></div>
+        <div class="flow-step-content">
+          <div class="flow-step-title">Auto-Complete on Checkout</div>
+          <div class="flow-step-desc">When fetching reservations, system checks: if CheckOutDate has passed AND status is Confirmed → automatically updates to Completed</div>
+          <div class="flow-step-tags"><span class="flow-tag tag-green">Auto Completed</span><span class="flow-tag tag-gray">No timer needed</span></div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-left"><div class="flow-step-num">5</div></div>
+        <div class="flow-step-content">
+          <div class="flow-step-title">Review Unlocked After Completion</div>
+          <div class="flow-step-desc">Renter can submit a review ONLY when ReservationStatus = Completed. One review per reservation. Auto-updates property average rating.</div>
+          <div class="flow-step-tags"><span class="flow-tag tag-orange">Rating 1–5</span><span class="flow-tag tag-green">Property rating auto-updated</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       5. API ROUTES
+  ══════════════════════════════════════════ -->
+  <section id="routes">
+    <div class="section-title">🛣️ API Route Map</div>
+    <div class="section-sub">Base URL: https://localhost:{port}/api/v1/rent-nest</div>
+
+    <!-- AUTH -->
+    <div class="routes-section">
+      <div class="routes-section-title">🔐 Auth — /auth</div>
+      <div class="route-table-wrap"><table class="route-table">
+        <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/signup-user</span></td><td><span class="auth-badge auth-public">Public</span></td><td>Register as Renter</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/signup-owner</span></td><td><span class="auth-badge auth-public">Public</span></td><td>Register as Owner (needs admin approval)</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/verify-otp</span></td><td><span class="auth-badge auth-public">Public</span></td><td>Verify email with OTP</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/resend-otp</span></td><td><span class="auth-badge auth-public">Public</span></td><td>Resend OTP email</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/signin-user</span></td><td><span class="auth-badge auth-public">Public</span></td><td>Login → returns JWT + RefreshToken</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/logout</span></td><td><span class="auth-badge auth-jwt">JWT</span></td><td>Logout → clears refresh token</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/refreshtoken</span></td><td><span class="auth-badge auth-public">Public</span></td><td>Get new access token using refresh token</td></tr>
+      </table>
+</div>
+    </div>
+
+    <!-- PROPERTIES -->
+    <div class="routes-section">
+      <div class="routes-section-title">🏠 Properties — /properties</div>
+      <div class="route-table-wrap"><table class="route-table">
+        <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/all</span></td><td><span class="auth-badge auth-public">Public</span></td><td>Get all available properties</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/{id}</span></td><td><span class="auth-badge auth-public">Public</span></td><td>Get single property details</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/search</span></td><td><span class="auth-badge auth-public">Public</span></td><td>Search by city, type, price, guests, dates</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/my-properties</span></td><td><span class="auth-badge auth-owner">Owner</span></td><td>Get all owner's own properties</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/create-property</span></td><td><span class="auth-badge auth-owner">Owner</span></td><td>Create new property listing</td></tr>
+        <tr><td><span class="method method-put">PUT</span></td><td><span class="url-text">/{id}</span></td><td><span class="auth-badge auth-owner">Owner</span></td><td>Update property details</td></tr>
+        <tr><td><span class="method method-delete">DELETE</span></td><td><span class="url-text">/{id}</span></td><td><span class="auth-badge auth-owner">Owner</span></td><td>Delete property</td></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/{id}/upload-images</span></td><td><span class="auth-badge auth-owner">Owner</span></td><td>Upload property image (max 5)</td></tr>
+      </table>
+</div>
+    </div>
+
+    <!-- RESERVATIONS -->
+    <div class="routes-section">
+      <div class="routes-section-title">📅 Reservations — /reservations</div>
+      <div class="route-table-wrap"><table class="route-table">
+        <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/create</span></td><td><span class="auth-badge auth-renter">Renter</span></td><td>Create new reservation</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/my-reservations</span></td><td><span class="auth-badge auth-renter">Renter</span></td><td>Get renter's own reservations</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/owner-reservations</span></td><td><span class="auth-badge auth-owner">Owner</span></td><td>Get all reservations on owner's properties</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/{id}</span></td><td><span class="auth-badge auth-jwt">JWT</span></td><td>Get single reservation by ID</td></tr>
+        <tr><td><span class="method method-put">PUT</span></td><td><span class="url-text">/status</span></td><td><span class="auth-badge auth-jwt">JWT</span></td><td>Update reservation status</td></tr>
+      </table>
+</div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="routes-section">
+      <div class="routes-section-title">⭐ Reviews — /reviews</div>
+      <div class="route-table-wrap"><table class="route-table">
+        <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/create-review</span></td><td><span class="auth-badge auth-renter">Renter</span></td><td>Submit review (only after Completed reservation)</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/property/{id}</span></td><td><span class="auth-badge auth-public">Public</span></td><td>Get all reviews for a property</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/my-reviews</span></td><td><span class="auth-badge auth-renter">Renter</span></td><td>Get renter's own reviews</td></tr>
+      </table>
+</div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="routes-section">
+      <div class="routes-section-title">👑 Admin — /super-admin</div>
+      <div class="route-table-wrap"><table class="route-table">
+        <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/owners/all</span></td><td><span class="auth-badge auth-admin">SuperAdmin</span></td><td>Get all owner accounts</td></tr>
+        <tr><td><span class="method method-put">PUT</span></td><td><span class="url-text">/owners/{id}/approve</span></td><td><span class="auth-badge auth-admin">SuperAdmin</span></td><td>Approve owner → IsOwner = true</td></tr>
+        <tr><td><span class="method method-put">PUT</span></td><td><span class="url-text">/owners/{id}/enable</span></td><td><span class="auth-badge auth-admin">SuperAdmin</span></td><td>Re-enable a disabled owner</td></tr>
+        <tr><td><span class="method method-put">PUT</span></td><td><span class="url-text">/owners/{id}/disable</span></td><td><span class="auth-badge auth-admin">SuperAdmin</span></td><td>Disable an owner account</td></tr>
+        <tr><td><span class="method method-delete">DELETE</span></td><td><span class="url-text">/owners/{id}/delete</span></td><td><span class="auth-badge auth-admin">SuperAdmin</span></td><td>Permanently delete owner</td></tr>
+      </table>
+</div>
+    </div>
+
+    <!-- MESSAGING -->
+    <div class="routes-section">
+      <div class="routes-section-title">💬 Messaging API — Separate Port</div>
+      <div class="route-table-wrap"><table class="route-table">
+        <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        <tr><td><span class="method method-post">POST</span></td><td><span class="url-text">/messages</span></td><td><span class="auth-badge auth-jwt">JWT</span></td><td>Send a message</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/messages/conversation/{id}</span></td><td><span class="auth-badge auth-jwt">JWT</span></td><td>Get conversation with a user</td></tr>
+        <tr><td><span class="method method-get">GET</span></td><td><span class="url-text">/messages</span></td><td><span class="auth-badge auth-jwt">JWT</span></td><td>Get all messages</td></tr>
+        <tr><td><span class="method method-put">PUT</span></td><td><span class="url-text">/messages/{id}/read</span></td><td><span class="auth-badge auth-jwt">JWT</span></td><td>Mark message as read</td></tr>
+      </table>
+</div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       6. ENUMS
+  ══════════════════════════════════════════ -->
+  <section id="enums">
+    <div class="section-title">📋 Enums</div>
+    <div class="section-sub">All predefined values used across the system</div>
+    <div class="enum-grid">
+
+      <div class="enum-card">
+        <div class="enum-header" style="background:var(--blue);">UserRole</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#dc2626;"></div>SuperAdmin</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#16a34a;"></div>Owner</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#7c3aed;"></div>Renter</div>
+      </div>
+
+      <div class="enum-card">
+        <div class="enum-header" style="background:#0891b2;">PropertyType</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#1a73e8;"></div>Flat</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#0891b2;"></div>Apartment</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#0d9488;"></div>Hotel</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#16a34a;"></div>Bungalow</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#7c3aed;"></div>Villa</div>
+      </div>
+
+      <div class="enum-card">
+        <div class="enum-header" style="background:var(--purple);">ReservationStatus</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#f97316;"></div>Pending</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#16a34a;"></div>Confirmed</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#1a73e8;"></div>Completed</div>
+        <div class="enum-item"><div class="enum-dot" style="background:#dc2626;"></div>Cancelled</div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>RentNest</strong> — Backend Technical Documentation · ASP.NET Core Web API (.NET 10)<br/>
+  <span style="margin-top:6px;display:inline-block;opacity:0.7;">Designed &amp; Developed by <strong style="color:white;">Anirban Mondal</strong></span>
+</footer>
+
+</body>
+</html>
