@@ -220,7 +220,8 @@ RentNest/
 
 ## 📄 Documentation
 
-Full technical documentation is available here (https://developerani01.github.io/RentNestDocomentation/)
+- Full technical documentation is available here (https://developerani01.github.io/RentNestDocomentation/)
+- .sql file is available in /docs
 
 ## 👨‍💻 Author
 
