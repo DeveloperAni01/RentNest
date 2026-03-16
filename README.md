@@ -41,6 +41,12 @@ Built with a clean **N-Layer Architecture** on the backend and a reactive **Angu
 - **SuperAdmin** — Platform oversight, user management
 
 ---
+## 📄 Documentation
+
+- Full technical documentation is available here (https://developerani01.github.io/RentNestDocomentation/)
+- .sql file is available in /docs
+
+---
 
 ## 🛠 Tech Stack
 
@@ -91,28 +97,28 @@ RentNest/
 ├── Frontend/
 │   └── rentnest-frontend/
 │       ├── src/app/
-│       │   ├── core/
-│       │   │   ├── guards/                # auth.guard, role.guard, public.guard
-│       │   │   ├── interceptors/          # auth.interceptor, refresh.interceptor
-│       │   │   └── services/              # auth.service, property.service, etc.
-│       │   ├── models/                    # TypeScript interfaces
-│       │   ├── pages/
-│       │   │   ├── login/
-│       │   │   ├── register/
-│       │   │   ├── home/
-│       │   │   ├── properties/
-│       │   │   ├── property-details/
-│       │   │   ├── add-property/
-│       │   │   ├── edit-property/
-│       │   │   ├── owner-properties/
-│       │   │   ├── owner-reservation/
-│       │   │   ├── renter-reservation/
-│       │   │   ├── super-admin/
-│       │   │   └── otp-verification/
-│       │   └── shared/
-│       │       ├── navbar/
-│       │       └── sidebar/
-│       └── src/app/core/criteria.spec.ts  # 62+ frontend tests
+│          ├── core/
+│          │   ├── guards/                # auth.guard, role.guard, public.guard
+│          │   ├── interceptors/          # auth.interceptor, refresh.interceptor
+│          │   └── services/              # auth.service, property.service, etc.
+│          ├── models/                    # TypeScript interfaces
+│          ├── pages/
+│          │   ├── login/
+│          │   ├── register/
+│          │   ├── home/
+│          │   ├── properties/
+│          │   ├── property-details/
+│          │   ├── add-property/
+│          │   ├── edit-property/
+│          │   ├── owner-properties/
+│          │   ├── owner-reservation/
+│          │   ├── renter-reservation/
+│          │   ├── super-admin/
+│          │   └── otp-verification/
+│          └── shared/
+│              ├── navbar/
+│              └── sidebar/
+│       
 │
 └── Docs/
     └── rentnest-technical-docs.html       # Full technical documentation
@@ -218,10 +224,6 @@ RentNest/
 
 ---
 
-## 📄 Documentation
-
-- Full technical documentation is available here (https://developerani01.github.io/RentNestDocomentation/)
-- .sql file is available in /docs
 
 ## 👨‍💻 Author
 
