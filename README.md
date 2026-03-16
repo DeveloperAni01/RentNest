@@ -66,39 +66,6 @@ Built with a clean **N-Layer Architecture** on the backend and a reactive **Angu
 | **Vitest** | Frontend unit & E2E testing |
 | **Route Guards** | Role-based navigation protection |
 
----
-
-## 🏗 Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                      CLIENT (Browser)                   │
-│                      Angular 21                         │
-│         Tailwind CSS │ Signals │ HTTP Interceptors      │
-└─────────────────────────┬───────────────────────────────┘
-                          │ HTTPS + JWT Bearer
-┌─────────────────────────▼───────────────────────────────┐
-│                   ASP.NET Core Web API                  │
-│              Controllers │ Middleware │ Guards          │
-└─────────────────────────┬───────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────┐
-│                    Application Layer                    │
-│              Services │ DTOs │ Interfaces               │
-└─────────────────────────┬───────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────┐
-│                  Infrastructure Layer                   │
-│         EF Core │ Repositories │ Token Service          │
-└─────────────────────────┬───────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────┐
-│                       SQL Server                        │
-│          Users │ Properties │ Reservations │ OTPs       │
-└─────────────────────────────────────────────────────────┘
-```
-
----
 
 ## 📁 Project Structure
 
@@ -224,7 +191,7 @@ RentNest/
               ┌────────────┴────────────┐
               │                         │
         ┌─────▼─────┐           ┌──────▼──────┐
-        │  Register  │           │    Login   │
+        │  Register │           │    Login    │
         └─────┬─────┘           └──────┬──────┘
               │                        │
         ┌─────▼─────┐                  │
@@ -263,21 +230,10 @@ RentNest/
 
 ## 📄 Documentation
 
-Full technical documentation is available in the `Docs/` folder:
-
-- `Docs/rentnest-technical-docs.html` — Complete technical documentation (open in browser)
-
----
+Full technical documentation is available here (https://developerani01.github.io/RentNestDocomentation/)
 
 ## 👨‍💻 Author
 
-**DeveloperAni01**
+**Anirban Mondal**
 - GitHub: [@DeveloperAni01](https://github.com/DeveloperAni01)
 
----
-
----
-
-<div align="center">
-  <strong>Built with ❤️ using .NET 10 + Angular 21</strong>
-</div>
