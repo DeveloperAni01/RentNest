@@ -118,16 +118,6 @@ RentNest/
     └── rentnest-technical-docs.html       # Full technical documentation
 ```
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- [.NET 10 SDK](https://dotnet.microsoft.com/download)
-- [Node.js 20+](https://nodejs.org/)
-- [SQL Server](https://www.microsoft.com/en-us/sql-server) (or SQL Server Express)
-- [Angular CLI](https://angular.io/cli) — `npm install -g @angular/cli`
-
 
 ## 🔐 Authentication Flow
 
