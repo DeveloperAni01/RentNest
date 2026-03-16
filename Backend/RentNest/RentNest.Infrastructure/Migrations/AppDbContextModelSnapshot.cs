@@ -278,7 +278,7 @@ namespace RentNest.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "RentNestSuperAdmin",
+                            UserId = "USR-0000",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "superadmin@rentnest.ac.in",
                             FirstName = "Super",

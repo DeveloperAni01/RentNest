@@ -5,6 +5,7 @@ obj/
 **/.vs/
 
 # Frontend
+.angular/
 node_modules/
 dist/
 

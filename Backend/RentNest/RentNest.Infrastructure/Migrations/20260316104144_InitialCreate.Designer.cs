@@ -12,7 +12,7 @@ using RentNest.Infrastructure.Data;
 namespace RentNest.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260315133302_InitialCreate")]
+    [Migration("20260316104144_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -281,7 +281,7 @@ namespace RentNest.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "RentNestSuperAdmin",
+                            UserId = "USR-0000",
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "superadmin@rentnest.ac.in",
                             FirstName = "Super",

@@ -157,7 +157,7 @@ namespace RentNest.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "CreatedAt", "Email", "FirstName", "Gender", "HashedPassword", "IsActive", "IsEmailVerified", "IsOwner", "LastName", "MiddleName", "Otp", "OtpExpiiry", "PhoneNumber", "RefreshToken", "RefreshTokenExpiiry", "Role" },
-                values: new object[] { "RentNestSuperAdmin", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "superadmin@rentnest.ac.in", "Super", "Male", "$2y$12$KN9G6XXgQ198DstRUcUPx.B6jn/xiOk6ORD8e7VyNJ2c8wkAA2BA6", true, true, false, "RentNest", "Admin", "0000", null, "0000000000", "0000", null, 0 });
+                values: new object[] { "USR-0000", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "superadmin@rentnest.ac.in", "Super", "Male", "$2y$12$KN9G6XXgQ198DstRUcUPx.B6jn/xiOk6ORD8e7VyNJ2c8wkAA2BA6", true, true, false, "RentNest", "Admin", "0000", null, "0000000000", "0000", null, 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Properties_OwnerId",

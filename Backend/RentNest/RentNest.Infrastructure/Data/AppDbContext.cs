@@ -81,7 +81,7 @@ namespace RentNest.Infrastructure.Data
             modelBuilder.Entity<User>() //supperAdmin data
                 .HasData(new User
                 {
-                    UserId = "RentNestSuperAdmin",
+                    UserId = "USR-0000",
                     FirstName = "Super",
                     MiddleName = "Admin",
                     LastName = "RentNest",

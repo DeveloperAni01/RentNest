@@ -48,15 +48,8 @@ namespace RentNest.Infrastructure.Services.Auth
 
         private async Task<string> CustomUserIdGenerateAsync()
         {
-            var lastUser = await _context.Users.OrderByDescending(u => u.UserId).FirstOrDefaultAsync();
-
-            if (lastUser == null) return "USR-000001";
-
-            var parts = lastUser.UserId.Split('-');
-            if (parts.Length < 2 || !int.TryParse(parts[1], out int lastNum))
-                return "USR-000001";
-
-            return $"USR-{(lastNum + 1):D6}";
+            int count = await _context.Users.CountAsync();
+            return $"USR-{(count + 1):D4}";
         }
 
         public async Task<AuthResponseDto> RefreshTokenAsync(string refreshToken)
