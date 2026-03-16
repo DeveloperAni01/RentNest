@@ -140,7 +140,7 @@ namespace RentNest.API.Controllers
                 await image.CopyToAsync(stream);
             }
 
-            var imgUrl = $"/uploads/propertyImages/{id}/{fileName}";
+            string imgUrl = $"/images/propertyImages/{id}/{fileName}";
             await _property.PropertyImagesAddAsync(id, imgUrl, order);
 
             return Ok(new ApiResponseDto<object>

@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'tailwindcss';
+@tailwind utilities;
+
+:root {
+    --primary: #1a73e8;
+    --primary-dark: #0d47a1;
+    --accent: #f97316;
+    --bg: #ffffff;
+    --card-bg: #f9fafb;
+    --border: #e5e7eb;
+    --text: #333333;
+    --light-blue-bg: #e8f0fe;
+  }
+  
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }

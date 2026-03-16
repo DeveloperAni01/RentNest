@@ -1,0 +1,73 @@
+
+[1m[46m RUN [49m[22m [36mv4.1.0 [39m[90md:/RentNest/Frontend/rentnest-frontend[39m
+
+ [31m❯[39m src/app/core/criteria.spec.ts [2m([22m[2m63 tests[22m[2m | [22m[31m58 failed[39m[2m)[22m[32m 93[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate empty email field[39m[32m 10[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate empty password field[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate correct email format[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate incorrect email format[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate password minimum length[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate password correct length[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate required first name[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate required email[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate password confirmation match[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m ✓ should fail validation when passwords do not match[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate phone number format[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m ✓ should fail validation for invalid phone format[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate gender selection[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should validate property type selection[39m[32m 1[2mms[22m[39m
+       [32m✓[39m ✓ should use flex layout for cards[32m 1[2mms[22m[39m
+       [32m✓[39m ✓ should use responsive responsive gap[32m 0[2mms[22m[39m
+       [32m✓[39m ✓ should use full width styling[32m 0[2mms[22m[39m
+       [32m✓[39m ✓ should use responsive grid layout[32m 0[2mms[22m[39m
+       [32m✓[39m ✓ should use min-height for full screen[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should store access token in localStorage on login[39m[32m 15[2mms[22m[39m
+[31m       [31m×[31m ✓ should store refresh token in localStorage[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should store user role in localStorage[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m ✓ should store user full name in localStorage[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should store user ID in localStorage[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should track logged in state with signal[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should update current user when login succeeds[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should clear session on logout[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should clear all tokens on logout[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should update tokens on refresh[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should preserve other data on token refresh[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should restore session on app initialization[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should include JWT token in Authorization header for API calls[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should use Bearer token format[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should handle missing token gracefully[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should complete full login-to-protected-resource flow[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should handle different user roles (Renter)[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should handle different user roles (Owner)[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should handle different user roles (SuperAdmin)[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should verify OTP during registration flow[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should resend OTP when needed[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should handle successful API response[39m[32m 9[2mms[22m[39m
+[31m       [31m×[31m ✓ should handle error API response[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m ✓ should create auth service[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ isLoggedIn should return false when no user[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ isLoggedIn should return true when user exists[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ getRole should return user role[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should register new renter user[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should register new owner user[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should create property service[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should fetch all properties[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should fetch property by ID[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should search properties with filters[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ should get my properties (owner)[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ should create new property[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m ✓ should update existing property[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m ✓ complete registration flow (Renter)[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ complete registration flow (Owner)[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ complete property creation flow[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m ✓ complete property search flow[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m ✓ CRITERION 1 (8 points): Responsiveness & Validation - 18 Tests Passed[39m[32m 7[2mms[22m[39m
+[31m     [31m×[31m ✓ CRITERION 2 (5 points): Session Handling - 16 Tests Passed[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m ✓ CRITERION 3 (5 points): JWT & Integration - 13 Tests Passed[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m ✓ CRITERION 4 (7 points): Component & E2E Tests - 18 Tests Passed[39m[32m 1[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m58 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (63)[39m
+[2m   Start at [22m 14:19:34
+[2m   Duration [22m 3.35s[2m (transform 144ms, setup 495ms, import 186ms, tests 93ms, environment 1.23s)[22m
+
