@@ -20,7 +20,7 @@ Log.Logger = new LoggerConfiguration().MinimumLevel.Information().MinimumLevel.O
 
 try
 {
-    Log.Information("RestNest API Starting.........");
+    Log.Information("RentNest API Starting.........");
 
     var builder = WebApplication.CreateBuilder(args);
     builder.Host.UseSerilog();
@@ -75,10 +75,7 @@ try
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("RentNestCors", policy =>
-            policy.WithOrigins("http://localhost:4200")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod()
-                  .AllowCredentials());
+            policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
     });
 
     //services iinvoked 
@@ -121,7 +118,7 @@ try
 
     app.Lifetime.ApplicationStarted.Register(() =>
     {
-        Log.Information("RentNest Server is runing successfully and listening!!");
+        Log.Information($"RentNest Server is runing successfully in {builder.Environment.EnvironmentName} mode and listening!!");
        
         foreach (var url in app.Urls)
         {
@@ -136,7 +133,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "RestNest API Failed to Start");
+    Log.Fatal(ex, "RentNest API Failed to Start!");
 }
 finally
 {

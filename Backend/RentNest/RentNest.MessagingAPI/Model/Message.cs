@@ -3,7 +3,7 @@
 namespace RentNest.MessagingAPI.Model
 {
     //entity for store messages 
-    public class Meessage
+    public class Message
     {
         //primary key
         [Key]

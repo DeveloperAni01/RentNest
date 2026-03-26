@@ -15,9 +15,9 @@ namespace RentNest.API.Controllers
     public class AdminController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<AuthController> _logger;
+        private readonly ILogger<AdminController> _logger;
 
-        public AdminController(AppDbContext context, ILogger<AuthController> logger)
+        public AdminController(AppDbContext context, ILogger<AdminController> logger)
         {
             _context = context;
             _logger = logger;
@@ -90,8 +90,8 @@ namespace RentNest.API.Controllers
             if (owner == null) throw new NotFound($"user not found wiith id : {userId}");
 
             if (owner.Role != Domain.Enums.UserRole.Owner) throw new BadRequest("user is not an owner");
-            if (owner.IsActive) throw new BadRequest("user is already disabled");
-
+            if (!owner.IsActive) throw new BadRequest("user is already disabled");
+            
             owner.IsActive = false;
             owner.IsOwner = false;
             await _context.SaveChangesAsync();

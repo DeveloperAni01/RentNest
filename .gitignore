@@ -1,9 +1,8 @@
-**/.vs/
-
 # Backend
 bin/
 obj/
 .vs/
+**/.vs/
 
 # Frontend
 .angular/
@@ -18,6 +17,6 @@ appsettings.Development.json
 Thumbs.db
 .DS_Store
 
-#user-project-files
+# User project files
 *.csproj.user
-*.csproj.user
+

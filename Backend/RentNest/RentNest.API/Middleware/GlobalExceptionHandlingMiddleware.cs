@@ -8,6 +8,7 @@ namespace RentNest.API.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<GlobalExceptionHandlingMiddleware> _logger;
+
         public GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlingMiddleware> logger)
         {
             _next = next;
@@ -18,11 +19,13 @@ namespace RentNest.API.Middleware
         {
             try
             {
+                // try to continue with the request bu using try
                 await _next(context);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unhandled exception OCCURED: {Message}", ex.Message);
+                // if exception occured then we just loggged that in our console
+                _logger.LogError(ex, "An error occurred in the API: {Message}", ex.Message);
 
                 await HandleExceptionAsync(context, ex);
             }
@@ -30,20 +33,22 @@ namespace RentNest.API.Middleware
 
         private static async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
+           
             int statusCode = 500;
-            string message = "Something went wrong!. Please tr later";
+            string message = "Something went wrong on our side. Please try again later."; //defalut error
 
-            if (ex is Infrastructure.Exceptions.NotFound)
+            
+            if (ex is NotFound)
             {
                 statusCode = 404;
                 message = ex.Message;
             }
-            else if (ex is Infrastructure.Exceptions.BadRequest)
+            else if (ex is BadRequest)
             {
                 statusCode = 400;
                 message = ex.Message;
             }
-            else if (ex is Infrastructure.Exceptions.Conflict)
+            else if (ex is Conflict)
             {
                 statusCode = 409;
                 message = ex.Message;
@@ -54,6 +59,7 @@ namespace RentNest.API.Middleware
                 message = ex.Message;
             }
 
+           
             var response = new ApiResponseDto<object>
             {
                 Success = false,
@@ -62,13 +68,12 @@ namespace RentNest.API.Middleware
                 Data = null
             };
 
+           
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = statusCode;
 
-            var jsonResponse = JsonSerializer.Serialize(response, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+            var jsonResponse = JsonSerializer.Serialize(response, options);
 
             await context.Response.WriteAsync(jsonResponse);
         }

@@ -2,6 +2,7 @@
 using RentNest.Application.DTOs.PropertyDtos;
 using RentNest.Application.Interfaces;
 using RentNest.Domain.Entities;
+using RentNest.Domain.Enums;
 using RentNest.Infrastructure.Data;
 using RentNest.Infrastructure.Exceptions;
 
@@ -45,7 +46,7 @@ namespace RentNest.Infrastructure.Services
 
         public async Task<List<PropertyResponseDto>> GetPropertiesListAsync()
         {
-            var property =  await _context.Properties.Include(p => p.Owner).Include(p => p.Images).Where(p => p.IsAvailable).OrderByDescending(p => p.Rating).Select(p => ResponseDto(p)).ToListAsync();
+            var property = await _context.Properties.Include(p => p.Owner).Include(p => p.Images).Where(p => p.IsAvailable).OrderByDescending(p => p.Rating).Select(p => ResponseDto(p)).ToListAsync();
             if (property == null) throw new NotFound("no property found!");
             return property;
         }
@@ -59,7 +60,7 @@ namespace RentNest.Infrastructure.Services
 
         public async Task<List<PropertyResponseDto>> OwnerPropertiesList(string ownerId)
         {
-            var properties =  await _context.Properties.Include(p => p.Owner).Include(p => p.Images).Where(p => p.OwnerId == ownerId).OrderByDescending(p => p.CreatedAt).Select(p => ResponseDto(p)).ToListAsync();
+            var properties = await _context.Properties.Include(p => p.Owner).Include(p => p.Images).Where(p => p.OwnerId == ownerId).OrderByDescending(p => p.CreatedAt).Select(p => ResponseDto(p)).ToListAsync();
             if (properties == null) throw new NotFound("no property found!");
             return properties;
         }
@@ -68,9 +69,9 @@ namespace RentNest.Infrastructure.Services
         {
             var query = _context.Properties.Include(p => p.Owner).Include(p => p.Images).Where(p => p.IsAvailable).AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchPropertyDto.City))query = query.Where(p => p.City.Contains(searchPropertyDto.City));
+            if (!string.IsNullOrEmpty(searchPropertyDto.City)) query = query.Where(p => p.City.Contains(searchPropertyDto.City));
 
-            if (!string.IsNullOrEmpty(searchPropertyDto.PropertyType))query = query.Where(p => p.PropertyType.ToString() == searchPropertyDto.PropertyType);
+            if (!string.IsNullOrEmpty(searchPropertyDto.PropertyType)) query = query.Where(p => p.PropertyType.ToString() == searchPropertyDto.PropertyType);
 
             if (searchPropertyDto.MaxGuests.HasValue) query = query.Where(p => p.MaxGuests >= searchPropertyDto.MaxGuests.Value);
             if (searchPropertyDto.MinPrice.HasValue) query = query.Where(p => p.PricePerNight >= searchPropertyDto.MinPrice.Value);
@@ -78,12 +79,12 @@ namespace RentNest.Infrastructure.Services
             if (searchPropertyDto.MaxPrice.HasValue) query = query.Where(p => p.PricePerNight <= searchPropertyDto.MaxPrice.Value);
 
 
-            if (!string.IsNullOrEmpty(searchPropertyDto.Feature))query = query.Where(p => p.Features.Contains(searchPropertyDto.Feature));
+            if (!string.IsNullOrEmpty(searchPropertyDto.Feature)) query = query.Where(p => p.Features.Contains(searchPropertyDto.Feature));
 
-           
+
             if (searchPropertyDto.CheckInDate.HasValue && searchPropertyDto.CheckOutDate.HasValue)
             {
-                var bookedPropertyIds = await _context.Reservations.Where(r =>r.ReservationStatus == Domain.Enums.ReservationStatus.Confirmed && r.CheckInDate < searchPropertyDto.CheckOutDate.Value && r.CheckOutDate > searchPropertyDto.CheckInDate.Value)
+                var bookedPropertyIds = await _context.Reservations.Where(r => r.ReservationStatus == Domain.Enums.ReservationStatus.Confirmed && r.CheckInDate < searchPropertyDto.CheckOutDate.Value && r.CheckOutDate > searchPropertyDto.CheckInDate.Value)
                     .Select(r => r.PropertyId)
                     .ToListAsync();
 
@@ -97,7 +98,7 @@ namespace RentNest.Infrastructure.Services
         {
             var owner = await _context.Users.FindAsync(ownerId) ?? throw new NotFound($"{ownerId} not found");
 
-            if (!owner.IsOwner)throw new UnAuthorized("Your owner account is not approved yet.");
+            if (!owner.IsOwner) throw new UnAuthorized("Your owner account is not approved yet.");
 
             var property = new Property
             {
@@ -183,5 +184,15 @@ namespace RentNest.Infrastructure.Services
 
             return await GetPropertyByIdAsync(id) ?? throw new BadRequest("Failed to update property.");
         }
+
+        public async Task<List<PropertyResponseDto>> TopRatedPropertiesAsync(PropertyType? propertyType = null)
+        {
+            var query = _context.Properties.Include(p => p.Owner).Include(p => p.Images).Where(p => p.IsAvailable).AsQueryable();
+            return await query.OrderByDescending(p => p.Rating).Take(12).Select(p => ResponseDto(p)).ToListAsync();
+
+        }
     }
+
 }
+    
+
