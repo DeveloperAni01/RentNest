@@ -65,6 +65,7 @@ namespace RentNest.API.Controllers
             if (owner.IsActive) throw new BadRequest("user is active");
 
             owner.IsActive = true;
+            owner.IsOwner = true;
             await _context.SaveChangesAsync();
 
             string fullName = $"{owner.FirstName} {owner.LastName}".Trim();
@@ -92,6 +93,7 @@ namespace RentNest.API.Controllers
             if (owner.IsActive) throw new BadRequest("user is already disabled");
 
             owner.IsActive = false;
+            owner.IsOwner = false;
             await _context.SaveChangesAsync();
 
             string fullName = $"{owner.FirstName} {owner.LastName}".Trim();
