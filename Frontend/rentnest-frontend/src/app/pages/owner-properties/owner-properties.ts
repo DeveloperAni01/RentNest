@@ -16,7 +16,7 @@ import { Property } from '../../models/property.model';
   providers: [ConfirmationService],
   template: `
     <div class="flex flex-col gap-4">
-      <!-- Header -->
+     
       <div class="flex justify-between items-center">
         <h2 class="text-xl font-bold">My Properties</h2>
         <p-button
@@ -26,12 +26,12 @@ import { Property } from '../../models/property.model';
         />
       </div>
 
-      <!-- Loading -->
+     
       <div *ngIf="loading" class="text-center py-12 text-gray-500">
         <i class="pi pi-spin pi-spinner text-4xl"></i>
       </div>
 
-      <!-- No Properties -->
+    
       <div *ngIf="!loading && properties.length === 0" class="text-center py-12 text-gray-500">
         <i class="pi pi-building text-5xl mb-4 block"></i>
         <p>No properties yet</p>

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -16,12 +16,10 @@ import { AuthService } from '../../core/services/auth.service';
       class="h-full flex flex-col p-3"
       style="background: var(--card-bg); border-right: 1px solid var(--border); width: 250px;"
     >
-      
       <div class="flex-1">
         <p-panelmenu [model]="items" styleClass="w-full" />
       </div>
 
-      
       <ng-container *ngIf="isMobile()">
         <p-divider />
         <div class="flex flex-col gap-2 pb-2">
@@ -50,6 +48,7 @@ export class SidebarComponent {
   constructor(
     public authService: AuthService,
     private router: Router,
+    private messageService: MessageService,
   ) {}
 
   get items(): MenuItem[] {
@@ -57,26 +56,37 @@ export class SidebarComponent {
 
     const common: MenuItem[] = [
       { label: 'Home', icon: 'pi pi-home', command: () => this.navigate('/') },
-      { label: 'Properties', icon: 'pi pi-building', command: () => this.navigate('/all-properties') },
+      {
+        label: 'Properties',
+        icon: 'pi pi-building',
+        command: () => this.navigate('/all-properties'),
+      },
     ];
 
     if (role === 'Owner') {
+      const isOwner = this.authService.currentUser()?.isOwner === 'true';
+
       return [
         ...common,
         {
           label: 'My Properties',
           icon: 'pi pi-list',
-          command: () => this.navigate('/owner/my-properties'),
+          command: () => this.handleOwnerNav('/owner/my-properties', isOwner),
         },
         {
           label: 'Create Property',
           icon: 'pi pi-plus',
-          command: () => this.navigate('/owner/properties/create'),
+          command: () => this.handleOwnerNav('/owner/properties/create', isOwner),
         },
         {
           label: 'Reservations',
           icon: 'pi pi-calendar',
-          command: () => this.navigate('/owner/reservations'),
+          command: () => this.handleOwnerNav('/owner/reservations', isOwner),
+        },
+        {
+          label: 'Messages',
+          icon: 'pi pi-comments',
+          command: () => this.handleOwnerNav('/messages', isOwner),
         },
       ];
     } else if (role === 'Renter') {
@@ -87,6 +97,8 @@ export class SidebarComponent {
           icon: 'pi pi-calendar',
           command: () => this.navigate('/my-reservations'),
         },
+        { label: 'My Reviews', icon: 'pi pi-star', command: () => this.navigate('/my-reviews') },
+        { label: 'Messages', icon: 'pi pi-comments', command: () => this.navigate('/messages') },
       ];
     } else if (role === 'SuperAdmin') {
       return [
@@ -96,6 +108,18 @@ export class SidebarComponent {
     }
 
     return common;
+  }
+
+  handleOwnerNav(path: string, isOwner: boolean) {
+    if (!isOwner) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Not Approved',
+        detail: 'Your account is pending admin approval',
+      });
+      return;
+    }
+    this.navigate(path);
   }
 
   isMobile(): boolean {
@@ -110,3 +134,4 @@ export class SidebarComponent {
     this.authService.logout();
   }
 }
+

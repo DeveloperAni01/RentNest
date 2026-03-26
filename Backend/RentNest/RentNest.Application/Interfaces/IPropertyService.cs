@@ -1,6 +1,7 @@
 ﻿//interface for all property crud operations
 
 using RentNest.Application.DTOs.PropertyDtos;
+using RentNest.Domain.Enums;
 
 
 namespace RentNest.Application.Interfaces
@@ -15,5 +16,6 @@ namespace RentNest.Application.Interfaces
         Task<List<PropertyResponseDto>> GetPropertiesListAsync();
         Task<PropertyResponseDto?> GetPropertyByIdAsync(int id);
         Task<List<PropertyResponseDto>> PropertiesSearchFilterAsync(SearchPropertyDto searchPropertyDto);
+        Task<List<PropertyResponseDto>> TopRatedPropertiesAsync(PropertyType? propertyType = null);
     }
 }

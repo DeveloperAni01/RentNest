@@ -7,21 +7,24 @@ import { MessageService } from 'primeng/api';
 import { ReservationService } from '../../core/services/reservation.service';
 import { Reservation, ReservationStatus } from '../../models/reservation.model';
 import { Card } from "primeng/card";
+import { RatingModule } from 'primeng/rating';
+import { DialogModule } from 'primeng/dialog';
+import { ReviewService } from '../../core/services/review.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-my-reservations',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, TagModule, Card],
+  imports: [CommonModule, TableModule, ButtonModule, TagModule, Card, RatingModule, DialogModule,FormsModule],
   template: `
     <div class="flex flex-col gap-4">
       <h2 class="text-xl font-bold">My Reservations</h2>
 
-     
       <div *ngIf="loading" class="text-center py-12">
         <i class="pi pi-spin pi-spinner text-4xl"></i>
       </div>
 
-      
+      <!-- Desktop Table -->
       <div class="hidden md:block">
         <p-table
           [value]="reservations"
@@ -54,13 +57,22 @@ import { Card } from "primeng/card";
                 />
               </td>
               <td>
-                <p-button
-                  *ngIf="reservation.reservationStatus === 'Pending'"
-                  label="Cancel"
-                  severity="danger"
-                  size="small"
-                  (click)="cancelReservation(reservation.reservationId)"
-                />
+                <div class="flex gap-2">
+                  <p-button
+                    *ngIf="reservation.reservationStatus === 'Pending'"
+                    label="Cancel"
+                    severity="danger"
+                    size="small"
+                    (click)="cancelReservation(reservation.reservationId)"
+                  />
+                  <p-button
+                    *ngIf="reservation.reservationStatus === 'Completed'"
+                    label="Review"
+                    severity="info"
+                    size="small"
+                    (click)="openReviewDialog(reservation)"
+                  />
+                </div>
               </td>
             </tr>
           </ng-template>
@@ -72,7 +84,7 @@ import { Card } from "primeng/card";
         </p-table>
       </div>
 
-     
+      <!-- Mobile Cards -->
       <div class="flex flex-col gap-3 md:hidden">
         <p-card *ngFor="let reservation of reservations">
           <div class="flex flex-col gap-2">
@@ -95,13 +107,22 @@ import { Card } from "primeng/card";
               <span class="font-bold" style="color: var(--accent)"
                 >₹{{ reservation.totalAmount }}</span
               >
-              <p-button
-                *ngIf="reservation.reservationStatus === 'Pending'"
-                label="Cancel"
-                severity="danger"
-                size="small"
-                (click)="cancelReservation(reservation.reservationId)"
-              />
+              <div class="flex gap-2">
+                <p-button
+                  *ngIf="reservation.reservationStatus === 'Pending'"
+                  label="Cancel"
+                  severity="danger"
+                  size="small"
+                  (click)="cancelReservation(reservation.reservationId)"
+                />
+                <p-button
+                  *ngIf="reservation.reservationStatus === 'Completed'"
+                  label="Review"
+                  severity="info"
+                  size="small"
+                  (click)="openReviewDialog(reservation)"
+                />
+              </div>
             </div>
           </div>
         </p-card>
@@ -111,6 +132,20 @@ import { Card } from "primeng/card";
           <p>No reservations found</p>
         </div>
       </div>
+
+      <!-- Review Dialog -->
+      <p-dialog
+        header="Rate Your Stay"
+        [(visible)]="reviewDialogVisible"
+        [modal]="true"
+        [style]="{ width: '300px' }"
+      >
+        <div class="flex flex-col gap-4 items-center py-2">
+          <p class="text-gray-600 text-sm">{{ selectedReservation?.propertyTitle }}</p>
+          <p-rating [(ngModel)]="rating" />
+          <p-button label="Submit Review" styleClass="w-full" (click)="submitReview()" />
+        </div>
+      </p-dialog>
     </div>
   `,
 })
@@ -121,6 +156,7 @@ export class MyReservationsComponent implements OnInit {
   constructor(
     private reservationService: ReservationService,
     private messageService: MessageService,
+    private reviewService: ReviewService,
   ) {}
 
   ngOnInit() {
@@ -174,6 +210,54 @@ export class MyReservationsComponent implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: err.error?.message || 'Failed to cancel',
+          });
+        },
+      });
+  }
+
+  reviewDialogVisible = false;
+  selectedReservation: Reservation | null = null;
+  rating = 0;
+
+  openReviewDialog(reservation: Reservation) {
+    this.selectedReservation = reservation;
+    this.reviewDialogVisible = true;
+    this.rating = 0;
+  }
+
+  submitReview() {
+    if (!this.rating) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'Please select a rating',
+      });
+      return;
+    }
+
+    this.reviewService
+      .createReview({
+        reservationId: this.selectedReservation!.reservationId,
+        propertyId: this.selectedReservation!.propertyId,
+        rating: this.rating,
+      })
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Review submitted!',
+            });
+            this.reviewDialogVisible = false;
+            this.loadReservations();
+          }
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error?.message || 'Failed to submit review',
           });
         },
       });

@@ -6,6 +6,21 @@ import { AuthService } from '../services/auth.service';
 export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
 
+  const skipUrls = [
+    '/refreshtoken',
+    '/logout',
+    '/signin-user',
+    '/signup-user',
+    '/signup-owner',
+    '/verify-otp',
+    '/resend-otp',
+  ];
+
+  // ← THIS WAS MISSING!
+  if (skipUrls.some((url) => req.url.includes(url))) {
+    return next(req);
+  }
+
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {

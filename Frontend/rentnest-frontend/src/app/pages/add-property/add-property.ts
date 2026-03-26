@@ -155,7 +155,7 @@ import { FileUploadModule } from 'primeng/fileupload';
             <p-button
               label="Cancel"
               severity="secondary"
-              (click)="router.navigate(['/owner/properties'])"
+              (click)="router.navigate(['/owner/all-properties'])"
             />
             <p-button label="Create Property" [loading]="loading" (click)="create()" />
           </div>
@@ -206,7 +206,7 @@ export class CreatePropertyComponent {
       !this.form.description ||
       !this.form.location ||
       !this.form.city ||
-      !this.form.propertyType ||
+      this.form.propertyType === null ||
       !this.form.pricePerNight ||
       !this.form.maxGuests
     ) {
@@ -236,7 +236,7 @@ export class CreatePropertyComponent {
                   summary: 'Success',
                   detail: 'Property created with images!',
                 });
-                this.router.navigate(['/owner/properties']);
+                this.router.navigate(['/owner/my-properties']);
               },
               error: () => {
                 this.messageService.add({
@@ -244,7 +244,7 @@ export class CreatePropertyComponent {
                   summary: 'Warning',
                   detail: 'Property created but image upload failed',
                 });
-                this.router.navigate(['/owner/properties']);
+                this.router.navigate(['/owner/my-properties']);
               },
             });
           } else {
@@ -253,7 +253,7 @@ export class CreatePropertyComponent {
               summary: 'Success',
               detail: 'Property created successfully!',
             });
-            this.router.navigate(['/owner/properties']);
+            this.router.navigate(['/owner/my-properties']);
           }
         }
       },

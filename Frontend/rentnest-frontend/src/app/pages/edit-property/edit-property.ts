@@ -228,7 +228,7 @@ export class EditPropertyComponent implements OnInit {
             summary: 'Success',
             detail: 'Property updated successfully!',
           });
-          this.router.navigate(['/owner/properties']);
+          this.router.navigate(['/owner/my-properties']);
         }
       },
       error: (err) => {

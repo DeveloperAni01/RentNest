@@ -14,6 +14,8 @@ import { ReservationService } from '../../core/services/reservation.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Property } from '../../models/property.model';
 import { DatePickerModule } from 'primeng/datepicker';
+import { ReviewService } from '../../core/services/review.service';
+import { Review } from '../../models/review.model';
 
 @Component({
   selector: 'app-property-detail',
@@ -31,7 +33,6 @@ import { DatePickerModule } from 'primeng/datepicker';
   ],
   template: `
     <div class="flex flex-col gap-6 max-w-4xl mx-auto" *ngIf="property">
-     
       <p-galleria
         [value]="images"
         [numVisible]="5"
@@ -49,10 +50,10 @@ import { DatePickerModule } from 'primeng/datepicker';
       </p-galleria>
 
       <div class="flex flex-col lg:flex-row gap-6">
-        
         <div class="flex flex-col gap-4 flex-1">
           <div class="flex justify-between items-start">
             <h1 class="text-2xl font-bold">{{ property.title }}</h1>
+
             <p-tag [value]="property.propertyType" severity="info" />
           </div>
 
@@ -61,12 +62,17 @@ import { DatePickerModule } from 'primeng/datepicker';
             <span class="text-sm text-gray-500">({{ property.rating }})</span>
           </div>
 
-          <div class="flex gap-4 text-sm text-gray-600">
+          <div class="flex flex-col gap-4 text-sm text-gray-600 items-start">
+            <div class="flex  gap-4 text-sm text-gray-600">
+              <span
+                ><i class="pi pi-map-marker mr-1"></i>{{ property.location }},
+                {{ property.city }}</span
+              >
+              <span><i class="pi pi-users mr-1"></i>Max {{ property.maxGuests }} guests</span>
+            </div>
             <span
-              ><i class="pi pi-map-marker mr-1"></i>{{ property.location }},
-              {{ property.city }}</span
+              ><h1 class="text-lg font-mono">Owner Name : {{ property.ownerName }}</h1></span
             >
-            <span><i class="pi pi-users mr-1"></i>Max {{ property.maxGuests }} guests</span>
           </div>
 
           <p-divider />
@@ -75,7 +81,6 @@ import { DatePickerModule } from 'primeng/datepicker';
 
           <p-divider />
 
-          
           <div>
             <h3 class="font-semibold mb-2">Features</h3>
             <div class="flex flex-wrap gap-2">
@@ -85,14 +90,31 @@ import { DatePickerModule } from 'primeng/datepicker';
 
           <p-divider />
 
-         
+          <!-- Reviews -->
+          <div>
+            <h3 class="font-semibold mb-3">Reviews ({{ reviews.length }})</h3>
+            <div *ngIf="reviews.length === 0" class="text-sm text-gray-500">No reviews yet</div>
+            <div class="flex flex-col gap-3">
+              <p-card *ngFor="let review of reviews" styleClass="w-full">
+                <div class="flex justify-between items-center">
+                  <span class="font-semibold text-sm">{{ review.renterName || 'Anonymous' }}</span>
+                  <span class="text-xs text-gray-400">{{
+                    review.createdAt | date: 'mediumDate'
+                  }}</span>
+                </div>
+                <p-rating [(ngModel)]="review.rating" [readonly]="true" styleClass="mt-2" />
+              </p-card>
+            </div>
+          </div>
+
+          <p-divider />
+
           <div class="flex gap-6 text-sm">
             <span><i class="pi pi-clock mr-1"></i>Check In: {{ property.checkInTime }}</span>
             <span><i class="pi pi-clock mr-1"></i>Check Out: {{ property.checkOutTime }}</span>
           </div>
         </div>
 
-       
         <div class="w-full lg:w-80">
           <p-card>
             <div class="flex flex-col gap-4">
@@ -138,6 +160,18 @@ import { DatePickerModule } from 'primeng/datepicker';
                 />
               </ng-container>
 
+              <!-- Contact Owner Button -->
+              <ng-container *ngIf="isLoggedIn && !isOwner">
+                <p-divider />
+                <p-button
+                  label="Contact Owner"
+                  icon="pi pi-comments"
+                  severity="secondary"
+                  styleClass="w-full"
+                  (click)="contactOwner()"
+                />
+              </ng-container>
+
               <ng-container *ngIf="!isRenter && !isLoggedIn">
                 <p class="text-sm text-gray-500 text-center">Please login as Renter to book</p>
                 <p-button
@@ -156,7 +190,6 @@ import { DatePickerModule } from 'primeng/datepicker';
       </div>
     </div>
 
-    
     <div *ngIf="!property" class="text-center py-12 text-gray-500">
       <i class="pi pi-spin pi-spinner text-4xl"></i>
     </div>
@@ -165,6 +198,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 export class PropertyDetailComponent implements OnInit {
   property: Property | null = null;
   images: string[] = [];
+  reviews: Review[] = [];
   featureList: string[] = [];
   checkInDate: Date | null = null;
   checkOutDate: Date | null = null;
@@ -178,7 +212,28 @@ export class PropertyDetailComponent implements OnInit {
     private authService: AuthService,
     private messageService: MessageService,
     public router: Router,
+    private reviewService: ReviewService,
   ) {}
+
+  loadReviews(propertyId: number) {
+    this.reviewService.getPropertyReviews(propertyId).subscribe({
+      next: (res) => {
+        if (res.success) this.reviews = res.data;
+      },
+      error: () => {},
+    });
+  }
+
+  contactOwner() {
+    if (this.property) {
+      this.router.navigate(['/messages'], {
+        queryParams: {
+          userId: this.property.ownerId,
+          userName: this.property.ownerName,
+        },
+      });
+    }
+  }
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
@@ -203,6 +258,7 @@ export class PropertyDetailComponent implements OnInit {
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.loadProperty(id);
+    this.loadReviews(id);
   }
 
   loadProperty(id: number) {

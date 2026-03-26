@@ -8,8 +8,13 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
     const router = inject(Router);
 
     const role = authService.getRole();
+    const isOwner = authService.getOwnerAcess();
 
     if (allowedRoles.includes(role)) {
+      return true;
+    }
+
+    if (allowedRoles.includes(isOwner)) {
       return true;
     }
 

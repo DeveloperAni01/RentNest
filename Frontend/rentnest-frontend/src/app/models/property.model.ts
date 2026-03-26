@@ -11,6 +11,7 @@ export interface PropertyImage {
 export interface Property {
   propertyId: number;
   ownerId: string;
+  ownerName: string;
   title: string;
   description: string;
   location: string;

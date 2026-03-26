@@ -40,6 +40,7 @@ export interface AuthResponse {
   role: string;
   fullName: string;
   userId: string;
+  isOwner: string;
   expiresAt: string;
   message: string;
 }

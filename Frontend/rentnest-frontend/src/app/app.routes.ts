@@ -63,6 +63,12 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard(['Renter'])],
   },
   {
+    path: 'my-reviews',
+    loadComponent: () =>
+      import('./pages/renter-reviews/renter-review').then((m) => m.MyReviewsComponent),
+    canActivate: [authGuard, roleGuard(['Renter'])],
+  },
+  {
     path: 'property/:id',
     loadComponent: () =>
       import('./pages/property-details/property-details').then((m) => m.PropertyDetailComponent),
@@ -71,6 +77,12 @@ export const routes: Routes = [
     path: 'admin',
     loadComponent: () => import('./pages/super-admin/super-admin').then((m) => m.AdminComponent),
     canActivate: [authGuard, roleGuard(['SuperAdmin'])],
+  },
+
+  {
+    path: 'messages',
+    loadComponent: () => import('./pages/messages/messages').then((m) => m.MessagesComponent),
+    canActivate: [authGuard],
   },
   {
     path: '**',

@@ -18,21 +18,25 @@ import {
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
 
-  // Signal to track auth state
-  currentUser = signal<{ fullName: string; role: string; userId: string } | null>(null);
+  currentUser = signal<{ fullName: string; role: string; userId: string; isOwner: string } | null>(
+    null,
+  );
 
   constructor(
     private http: HttpClient,
     private router: Router,
   ) {
-    // Restore from localStorage on app start
     const token = localStorage.getItem('access_token');
-    if (token) {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (token && refreshToken) {
       this.currentUser.set({
         fullName: localStorage.getItem('fullName') || '',
         role: localStorage.getItem('role') || '',
         userId: localStorage.getItem('userId') || '',
+        isOwner: localStorage.getItem('isOwner') || '',
       });
+      // fetch fresh data on app start
+      this.refreshToken().subscribe();
     }
   }
 
@@ -55,16 +59,20 @@ export class AuthService {
   login(data: LoginRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/signin-user`, data).pipe(
       tap((response) => {
+        // console.log(response.data);
+
         if (response.success) {
           localStorage.setItem('access_token', response.data.accessToken);
           localStorage.setItem('refresh_token', response.data.refreshToken);
           localStorage.setItem('role', response.data.role);
           localStorage.setItem('fullName', response.data.fullName);
           localStorage.setItem('userId', response.data.userId);
+          localStorage.setItem('isOwner', response.data.isOwner);
           this.currentUser.set({
             fullName: response.data.fullName,
             role: response.data.role,
             userId: response.data.userId,
+            isOwner: response.data.isOwner,
           });
         }
       }),
@@ -80,15 +88,23 @@ export class AuthService {
           if (response.success) {
             localStorage.setItem('access_token', response.data.accessToken);
             localStorage.setItem('refresh_token', response.data.refreshToken);
+            localStorage.setItem('isOwner', String(response.data.isOwner));
+            // ← update signal with fresh isOwner
+            this.currentUser.set({
+              fullName: response.data.fullName,
+              role: response.data.role,
+              userId: response.data.userId,
+              isOwner: String(response.data.isOwner),
+            });
           }
         }),
       );
   }
 
   logout(): void {
-    this.http.post(`${this.apiUrl}/logout`, {}).subscribe();
     localStorage.clear();
     this.currentUser.set(null);
+    this.http.post(`${this.apiUrl}/logout`, {}).subscribe();
     this.router.navigate(['/login']);
   }
 
@@ -100,6 +116,10 @@ export class AuthService {
     return this.currentUser()?.role || '';
   }
 
+  getOwnerAcess(): string {
+    return this.currentUser()?.isOwner || '';
+  }
+
   getFirstName(): string {
     return this.currentUser()?.fullName || '';
   }
@@ -108,3 +128,4 @@ export class AuthService {
     return this.currentUser()?.userId || '';
   }
 }
+
