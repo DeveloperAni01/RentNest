@@ -1,8 +1,8 @@
-#RentNest
+## RentNest
 
 > **A full-stack property rental platform** — connecting property owners and renters through a secure, modern web application.
 
-## 🌟 Overview
+## Overview
 
 **RentNest** is a production-ready property rental platform that allows:
 - **Renters** to browse, search, and book properties
@@ -13,42 +13,42 @@ Built with a clean **N-Layer Architecture** on the backend and a reactive **Angu
 
 ---
 
-## ✨ Features
+## Features
 
-### 🔐 Authentication & Security
+### Authentication & Security
 - User registration with **email OTP verification**
 - JWT access tokens (60-min expiry) + refresh token mechanism
 - Role-based route guards (Renter / Owner / SuperAdmin)
 - Auto session restore on page reload
 - Secure logout (clears all tokens)
 
-### 🏘️ Property Management
+### Property Management
 - Browse all available properties
 - Advanced search & filtering
 - Property image uploads (multiple images per property)
 - Owners can add, edit, and manage their listings
 - Detailed property pages with amenities
 
-### 📅 Reservation System
+###  Reservation System
 - Renters can make reservations with date selection
 - Conflict detection (no double bookings)
 - Owners can approve/reject reservations
 - Full reservation history for both roles
 
-### 👤 User Roles
+###  User Roles
 - **Renter** — Browse, search, reserve properties
 - **Owner** — List properties, manage reservations
 - **SuperAdmin** — Platform oversight, user management
 
 ---
-## 📄 Documentation
+##  Documentation
 
 - Full technical documentation is available here (https://developerani01.github.io/RentNestDocomentation/)
 - .sql file is available in /docs
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 ### Backend
 | Technology | Purpose |
@@ -73,7 +73,7 @@ Built with a clean **N-Layer Architecture** on the backend and a reactive **Angu
 | **Route Guards** | Role-based navigation protection |
 
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 RentNest/
@@ -125,7 +125,7 @@ RentNest/
 ```
 
 
-## 🔐 Authentication Flow
+##  Authentication Flow
 
 ```
 1. REGISTRATION
@@ -152,23 +152,23 @@ RentNest/
 
 ---
 
-## 👥 User Roles
+##  User Roles
 
-### 🏠 Renter
+###  Renter
 - Browse and search all available properties
 - View detailed property information & images
 - Make reservation requests with date selection
 - Track reservation status (Pending / Approved / Rejected)
 - View full booking history
 
-### 🔑 Owner
+###  Owner
 - List new properties with images & amenities
 - Edit and manage existing listings
 - View all incoming reservation requests
 - Approve or reject reservation requests
 - Dashboard with property & booking overview
 
-### ⚙️ SuperAdmin
+###  SuperAdmin
 - View all users on the platform
 - Manage platform-wide settings
 - Access all properties and reservations
@@ -176,7 +176,7 @@ RentNest/
 
 ---
 
-## 🗺 Application Flow
+##  Application Flow
 
 ```
                     ┌─────────────┐
@@ -214,7 +214,7 @@ RentNest/
 
 ---
 
-## 🌿 Branch Strategy
+##  Branch Strategy
 
 | Branch | Purpose |
 |---|---|
@@ -225,7 +225,7 @@ RentNest/
 ---
 
 
-## 👨‍💻 Author
+##  Author
 
 **Anirban Mondal**
 - GitHub: [@DeveloperAni01](https://github.com/DeveloperAni01)
