@@ -91,8 +91,8 @@ namespace RentNest.API.Controllers
 
             if (owner.Role != Domain.Enums.UserRole.Owner) throw new BadRequest("user is not an owner");
             if (!owner.IsActive) throw new BadRequest("user is already disabled");
-
-            //owner.IsActive = false;
+            
+            owner.IsActive = false;
             owner.IsOwner = false;
             await _context.SaveChangesAsync();
 
